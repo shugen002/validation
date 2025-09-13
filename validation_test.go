@@ -1,12 +1,14 @@
 package validation
 
 import (
+	"encoding/json"
+	"os"
 	"testing"
 )
 
 func TestBasicRules(t *testing.T) {
 	factory := NewFactory()
-	
+
 	tests := []struct {
 		name     string
 		data     map[string]interface{}
@@ -455,11 +457,11 @@ func TestBasicRules(t *testing.T) {
 			valid: true,
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			validator := factory.Make(test.data, test.rules)
-			
+
 			if test.valid {
 				if !validator.Passes() {
 					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
@@ -475,7 +477,7 @@ func TestBasicRules(t *testing.T) {
 
 func TestStringRules(t *testing.T) {
 	factory := NewFactory()
-	
+
 	tests := []struct {
 		name  string
 		data  map[string]interface{}
@@ -603,11 +605,11 @@ func TestStringRules(t *testing.T) {
 			valid: true,
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			validator := factory.Make(test.data, test.rules)
-			
+
 			if test.valid {
 				if !validator.Passes() {
 					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
@@ -623,7 +625,7 @@ func TestStringRules(t *testing.T) {
 
 func TestNumericRules(t *testing.T) {
 	factory := NewFactory()
-	
+
 	tests := []struct {
 		name  string
 		data  map[string]interface{}
@@ -721,11 +723,11 @@ func TestNumericRules(t *testing.T) {
 			valid: true,
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			validator := factory.Make(test.data, test.rules)
-			
+
 			if test.valid {
 				if !validator.Passes() {
 					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
@@ -741,7 +743,7 @@ func TestNumericRules(t *testing.T) {
 
 func TestListRules(t *testing.T) {
 	factory := NewFactory()
-	
+
 	tests := []struct {
 		name  string
 		data  map[string]interface{}
@@ -789,11 +791,11 @@ func TestListRules(t *testing.T) {
 			valid: false,
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			validator := factory.Make(test.data, test.rules)
-			
+
 			if test.valid {
 				if !validator.Passes() {
 					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
@@ -809,7 +811,7 @@ func TestListRules(t *testing.T) {
 
 func TestFieldRelationshipRules(t *testing.T) {
 	factory := NewFactory()
-	
+
 	tests := []struct {
 		name  string
 		data  map[string]interface{}
@@ -883,11 +885,11 @@ func TestFieldRelationshipRules(t *testing.T) {
 			valid: false,
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			validator := factory.Make(test.data, test.rules)
-			
+
 			if test.valid {
 				if !validator.Passes() {
 					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
@@ -903,7 +905,7 @@ func TestFieldRelationshipRules(t *testing.T) {
 
 func TestNetworkRules(t *testing.T) {
 	factory := NewFactory()
-	
+
 	tests := []struct {
 		name  string
 		data  map[string]interface{}
@@ -1001,11 +1003,72 @@ func TestNetworkRules(t *testing.T) {
 			valid: true,
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			validator := factory.Make(test.data, test.rules)
-			
+
+			if test.valid {
+				if !validator.Passes() {
+					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
+				}
+			} else {
+				if validator.Passes() {
+					t.Errorf("Expected validation to fail, but it passed")
+				}
+			}
+		})
+	}
+}
+
+func TestRealWorldRules(t *testing.T) {
+	factory := NewFactory()
+	// read from tests/variables.json
+	file, err := os.ReadFile("tests/variables.json")
+	if err != nil {
+		t.Fatalf("Failed to read variables.json: %v", err)
+	}
+
+	var rules []struct {
+		Name    string `json:"name"`
+		Key     string `json:"key"`
+		Rule    string `json:"rule"`
+		Default string `json:"default"`
+	}
+	if err := json.Unmarshal(file, &rules); err != nil {
+		t.Fatalf("Failed to unmarshal variables.json: %v", err)
+	}
+
+	tests := []struct {
+		name  string
+		data  map[string]interface{}
+		rules map[string]interface{}
+		valid bool
+	}{}
+
+	for _, r := range rules {
+		test := struct {
+			name  string
+			data  map[string]interface{}
+			rules map[string]interface{}
+			valid bool
+		}{
+			name: r.Name,
+			data: map[string]interface{}{
+				r.Key: r.Default,
+			},
+			rules: map[string]interface{}{
+				r.Key: r.Rule,
+			},
+			valid: true,
+		}
+		tests = append(tests, test)
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			validator := factory.Make(test.data, test.rules)
+
 			if test.valid {
 				if !validator.Passes() {
 					t.Errorf("Expected validation to pass, but it failed. Errors: %v", validator.Errors().All())
