@@ -638,6 +638,14 @@ type BetweenRule struct {
 }
 
 func (r *BetweenRule) Passes(attribute string, value interface{}) bool {
+	// First try to get numeric value for string numbers
+	if stringValue, ok := value.(string); ok {
+		if floatVal, err := strconv.ParseFloat(stringValue, 64); err == nil {
+			return floatVal >= r.Min && floatVal <= r.Max
+		}
+	}
+	
+	// Fall back to GetSize for non-numeric values
 	size, ok := GetSize(value)
 	return ok && size >= r.Min && size <= r.Max
 }
