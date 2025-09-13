@@ -164,6 +164,296 @@ func TestBasicRules(t *testing.T) {
 			},
 			valid: false,
 		},
+		// Accepted rule tests
+		{
+			name: "accepted rule passes with true boolean",
+			data: map[string]interface{}{
+				"terms": true,
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule passes with 'yes' string",
+			data: map[string]interface{}{
+				"terms": "yes",
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule passes with 'on' string",
+			data: map[string]interface{}{
+				"terms": "on",
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule passes with '1' string",
+			data: map[string]interface{}{
+				"terms": "1",
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule passes with 'true' string",
+			data: map[string]interface{}{
+				"terms": "true",
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule passes with integer 1",
+			data: map[string]interface{}{
+				"terms": 1,
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule passes with float 1.0",
+			data: map[string]interface{}{
+				"terms": 1.0,
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted rule fails with false boolean",
+			data: map[string]interface{}{
+				"terms": false,
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: false,
+		},
+		{
+			name: "accepted rule fails with 'no' string",
+			data: map[string]interface{}{
+				"terms": "no",
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: false,
+		},
+		{
+			name: "accepted rule fails with integer 0",
+			data: map[string]interface{}{
+				"terms": 0,
+			},
+			rules: map[string]interface{}{
+				"terms": "accepted",
+			},
+			valid: false,
+		},
+		// Declined rule tests
+		{
+			name: "declined rule passes with false boolean",
+			data: map[string]interface{}{
+				"newsletter": false,
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule passes with 'no' string",
+			data: map[string]interface{}{
+				"newsletter": "no",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule passes with 'off' string",
+			data: map[string]interface{}{
+				"newsletter": "off",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule passes with '0' string",
+			data: map[string]interface{}{
+				"newsletter": "0",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule passes with 'false' string",
+			data: map[string]interface{}{
+				"newsletter": "false",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule passes with integer 0",
+			data: map[string]interface{}{
+				"newsletter": 0,
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule passes with float 0.0",
+			data: map[string]interface{}{
+				"newsletter": 0.0,
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: true,
+		},
+		{
+			name: "declined rule fails with true boolean",
+			data: map[string]interface{}{
+				"newsletter": true,
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: false,
+		},
+		{
+			name: "declined rule fails with 'yes' string",
+			data: map[string]interface{}{
+				"newsletter": "yes",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: false,
+		},
+		{
+			name: "declined rule fails with integer 1",
+			data: map[string]interface{}{
+				"newsletter": 1,
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined",
+			},
+			valid: false,
+		},
+		// Accepted If rule tests
+		{
+			name: "accepted_if rule passes when condition met and field accepted",
+			data: map[string]interface{}{
+				"payment_method": "card",
+				"save_card":      "yes",
+			},
+			rules: map[string]interface{}{
+				"save_card": "accepted_if:payment_method,card",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted_if rule fails when condition met and field not accepted",
+			data: map[string]interface{}{
+				"payment_method": "card",
+				"save_card":      "no",
+			},
+			rules: map[string]interface{}{
+				"save_card": "accepted_if:payment_method,card",
+			},
+			valid: false,
+		},
+		{
+			name: "accepted_if rule passes when condition not met",
+			data: map[string]interface{}{
+				"payment_method": "cash",
+				"save_card":      "no",
+			},
+			rules: map[string]interface{}{
+				"save_card": "accepted_if:payment_method,card",
+			},
+			valid: true,
+		},
+		{
+			name: "accepted_if rule passes when condition field missing",
+			data: map[string]interface{}{
+				"save_card": "no",
+			},
+			rules: map[string]interface{}{
+				"save_card": "accepted_if:payment_method,card",
+			},
+			valid: true,
+		},
+		// Declined If rule tests
+		{
+			name: "declined_if rule passes when condition met and field declined",
+			data: map[string]interface{}{
+				"account_type": "guest",
+				"newsletter":   "no",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined_if:account_type,guest",
+			},
+			valid: true,
+		},
+		{
+			name: "declined_if rule fails when condition met and field not declined",
+			data: map[string]interface{}{
+				"account_type": "guest",
+				"newsletter":   "yes",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined_if:account_type,guest",
+			},
+			valid: false,
+		},
+		{
+			name: "declined_if rule passes when condition not met",
+			data: map[string]interface{}{
+				"account_type": "premium",
+				"newsletter":   "yes",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined_if:account_type,guest",
+			},
+			valid: true,
+		},
+		{
+			name: "declined_if rule passes when condition field missing",
+			data: map[string]interface{}{
+				"newsletter": "yes",
+			},
+			rules: map[string]interface{}{
+				"newsletter": "declined_if:account_type,guest",
+			},
+			valid: true,
+		},
 	}
 	
 	for _, test := range tests {

@@ -12,6 +12,8 @@ This library implements all major Laravel validation rules except database and f
 - `integer` - Field must be an integer (supports strict mode)
 - `numeric` - Field must be numeric (supports strict mode)
 - `boolean` - Field must be boolean (supports strict mode)
+- `accepted` - Field must be accepted ("yes", "on", 1, "1", true, "true")
+- `declined` - Field must be declined ("no", "off", 0, "0", false, "false")
 - `array` - Field must be an array
 - `json` - Field must be valid JSON
 
@@ -48,6 +50,8 @@ This library implements all major Laravel validation rules except database and f
 - `same` - Same as another field
 - `different` - Different from other fields
 - `confirmed` - Has matching confirmation field
+- `accepted_if` - Must be accepted if another field equals specified value
+- `declined_if` - Must be declined if another field equals specified value
 
 ### Date/Time Validation
 - `date` - Valid date
@@ -194,6 +198,54 @@ validator.Sometimes("phone", []validation.Rule{
 })
 ```
 
+### Boolean Validation
+
+```go
+// Accepted rule - useful for terms of service, agreements, etc.
+data := map[string]interface{}{
+    "terms_of_service": "yes",
+    "privacy_policy":   true,
+    "newsletter":       1,
+}
+
+rules := map[string]interface{}{
+    "terms_of_service": "required|accepted",
+    "privacy_policy":   "required|accepted", 
+    "newsletter":       "accepted",
+}
+
+validator := factory.Make(data, rules)
+
+// Declined rule - useful for opt-outs, rejections, etc.
+data = map[string]interface{}{
+    "spam_emails":     "no",
+    "data_sharing":    false,
+    "marketing_calls": 0,
+}
+
+rules = map[string]interface{}{
+    "spam_emails":     "required|declined",
+    "data_sharing":    "declined",
+    "marketing_calls": "declined",
+}
+
+validator = factory.Make(data, rules)
+
+// Conditional acceptance based on other fields
+data = map[string]interface{}{
+    "payment_method": "credit_card",
+    "save_card":      "yes",        // Must be accepted since payment_method is credit_card
+    "auto_billing":   "no",         // Can be anything since condition not met
+}
+
+rules = map[string]interface{}{
+    "save_card":    "accepted_if:payment_method,credit_card",
+    "auto_billing": "declined_if:payment_method,cash",
+}
+
+validator = factory.Make(data, rules)
+```
+
 ### Struct Validation with Tags
 
 ```go
@@ -269,6 +321,8 @@ rules := map[string]interface{}{
 - `integer[:strict]` - Must be an integer (strict mode only accepts actual int types)
 - `numeric[:strict]` - Must be numeric (strict mode rejects string numbers)
 - `boolean[:strict]` - Must be boolean (strict mode only accepts actual bool types)
+- `accepted` - Must be accepted ("yes", "on", 1, "1", true, "true")
+- `declined` - Must be declined ("no", "off", 0, "0", false, "false")
 - `array[:key1,key2]` - Must be an array (optionally restrict allowed keys)
 - `json` - Must be valid JSON string
 
@@ -305,6 +359,8 @@ rules := map[string]interface{}{
 - `same:field` - Must be the same as another field
 - `different:field1,field2` - Must be different from specified fields
 - `confirmed[:field]` - Must have matching confirmation field (defaults to fieldname_confirmation)
+- `accepted_if:field,value` - Must be accepted if another field equals the specified value
+- `declined_if:field,value` - Must be declined if another field equals the specified value
 
 #### Date Rules
 - `date` - Must be a valid date

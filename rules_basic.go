@@ -152,6 +152,134 @@ func (r *BooleanRule) Message() string {
 	return "The :attribute field must be true or false."
 }
 
+// AcceptedRule validates that a field is accepted (yes, on, 1, "1", true, "true")
+type AcceptedRule struct{}
+
+func (r *AcceptedRule) Passes(attribute string, value interface{}) bool {
+	switch v := value.(type) {
+	case bool:
+		return v
+	case string:
+		return v == "yes" || v == "on" || v == "1" || v == "true"
+	case int, int8, int16, int32, int64:
+		return reflect.ValueOf(v).Int() == 1
+	case uint, uint8, uint16, uint32, uint64:
+		return reflect.ValueOf(v).Uint() == 1
+	case float32, float64:
+		return reflect.ValueOf(v).Float() == 1
+	}
+	
+	return false
+}
+
+func (r *AcceptedRule) Message() string {
+	return "The :attribute must be accepted."
+}
+
+func (r *AcceptedRule) IsImplicit() bool {
+	return true
+}
+
+// AcceptedIfRule validates that a field is accepted if another field equals a specified value
+type AcceptedIfRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+}
+
+func (r *AcceptedIfRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the specified value
+	otherValue, exists := r.data[r.Field]
+	if !exists {
+		return true // If the condition field doesn't exist, this rule passes
+	}
+	
+	otherValueStr := ToString(otherValue)
+	if otherValueStr != r.Value {
+		return true // If the condition is not met, this rule passes
+	}
+	
+	// If condition is met, check if the field is accepted
+	acceptedRule := &AcceptedRule{}
+	return acceptedRule.Passes(attribute, value)
+}
+
+func (r *AcceptedIfRule) Message() string {
+	return "The :attribute must be accepted when " + r.Field + " is " + r.Value + "."
+}
+
+func (r *AcceptedIfRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *AcceptedIfRule) IsImplicit() bool {
+	return true
+}
+
+// DeclinedRule validates that a field is declined (no, off, 0, "0", false, "false")
+type DeclinedRule struct{}
+
+func (r *DeclinedRule) Passes(attribute string, value interface{}) bool {
+	switch v := value.(type) {
+	case bool:
+		return !v
+	case string:
+		return v == "no" || v == "off" || v == "0" || v == "false"
+	case int, int8, int16, int32, int64:
+		return reflect.ValueOf(v).Int() == 0
+	case uint, uint8, uint16, uint32, uint64:
+		return reflect.ValueOf(v).Uint() == 0
+	case float32, float64:
+		return reflect.ValueOf(v).Float() == 0
+	}
+	
+	return false
+}
+
+func (r *DeclinedRule) Message() string {
+	return "The :attribute must be declined."
+}
+
+func (r *DeclinedRule) IsImplicit() bool {
+	return true
+}
+
+// DeclinedIfRule validates that a field is declined if another field equals a specified value
+type DeclinedIfRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+}
+
+func (r *DeclinedIfRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the specified value
+	otherValue, exists := r.data[r.Field]
+	if !exists {
+		return true // If the condition field doesn't exist, this rule passes
+	}
+	
+	otherValueStr := ToString(otherValue)
+	if otherValueStr != r.Value {
+		return true // If the condition is not met, this rule passes
+	}
+	
+	// If condition is met, check if the field is declined
+	declinedRule := &DeclinedRule{}
+	return declinedRule.Passes(attribute, value)
+}
+
+func (r *DeclinedIfRule) Message() string {
+	return "The :attribute must be declined when " + r.Field + " is " + r.Value + "."
+}
+
+func (r *DeclinedIfRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *DeclinedIfRule) IsImplicit() bool {
+	return true
+}
+
 // ArrayRule validates that a field is an array
 type ArrayRule struct {
 	AllowedKeys []string

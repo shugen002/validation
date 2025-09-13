@@ -239,5 +239,82 @@ func main() {
 	}
 	
 	fmt.Println()
+	
+	// Example 9: Boolean validation rules
+	fmt.Println("=== Example 9: Boolean Validation Rules ===")
+	
+	// Accepted rule example
+	acceptData := map[string]interface{}{
+		"terms_of_service": "yes",
+		"privacy_policy":   true,
+		"newsletter":       1,
+	}
+	
+	acceptRules := map[string]interface{}{
+		"terms_of_service": "required|accepted",
+		"privacy_policy":   "required|accepted",
+		"newsletter":       "accepted",
+	}
+	
+	acceptValidator := factory.Make(acceptData, acceptRules)
+	
+	if acceptValidator.Passes() {
+		fmt.Println("✓ All accepted fields validated successfully!")
+	} else {
+		fmt.Println("✗ Accepted validation failed!")
+		for field, errors := range acceptValidator.Errors().All() {
+			fmt.Printf("  %s: %v\n", field, errors)
+		}
+	}
+	
+	// Declined rule example
+	declineData := map[string]interface{}{
+		"spam_emails":     "no",
+		"data_sharing":    false,
+		"marketing_calls": 0,
+	}
+	
+	declineRules := map[string]interface{}{
+		"spam_emails":     "required|declined",
+		"data_sharing":    "declined",
+		"marketing_calls": "declined",
+	}
+	
+	declineValidator := factory.Make(declineData, declineRules)
+	
+	if declineValidator.Passes() {
+		fmt.Println("✓ All declined fields validated successfully!")
+	} else {
+		fmt.Println("✗ Declined validation failed!")
+		for field, errors := range declineValidator.Errors().All() {
+			fmt.Printf("  %s: %v\n", field, errors)
+		}
+	}
+	
+	// Conditional boolean validation
+	conditionalBoolData := map[string]interface{}{
+		"payment_method": "credit_card",
+		"save_card":      "yes",
+		"account_type":   "guest",
+		"newsletter":     "no",
+	}
+	
+	conditionalBoolRules := map[string]interface{}{
+		"save_card":  "accepted_if:payment_method,credit_card",
+		"newsletter": "declined_if:account_type,guest",
+	}
+	
+	conditionalBoolValidator := factory.Make(conditionalBoolData, conditionalBoolRules)
+	
+	if conditionalBoolValidator.Passes() {
+		fmt.Println("✓ Conditional boolean validation passed!")
+	} else {
+		fmt.Println("✗ Conditional boolean validation failed!")
+		for field, errors := range conditionalBoolValidator.Errors().All() {
+			fmt.Printf("  %s: %v\n", field, errors)
+		}
+	}
+	
+	fmt.Println()
 	fmt.Println("=== All Examples Complete ===")
 }
