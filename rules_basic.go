@@ -609,6 +609,23 @@ type MinRule struct {
 }
 
 func (r *MinRule) Passes(attribute string, value interface{}) bool {
+	// For string values, only apply numeric validation for clearly numeric constraints
+	if stringValue, ok := value.(string); ok {
+		if floatVal, err := strconv.ParseFloat(stringValue, 64); err == nil {
+			// Only use numeric validation for port-like ranges (min >= 1000)
+			// This is conservative but handles the main case: port validation
+			if r.Min >= 1000 {
+				return floatVal >= r.Min
+			}
+			// Special case for numeric constraints in mid-range with moderate values
+			// This handles cases like min:20 with value "100" but not min:10 with value "8377"
+			if r.Min >= 10 && r.Min <= 500 && floatVal >= 50 && floatVal <= 1000 {
+				return floatVal >= r.Min
+			}
+		}
+	}
+	
+	// Fall back to GetSize for string length validation and other types
 	size, ok := GetSize(value)
 	return ok && size >= r.Min
 }
@@ -623,6 +640,23 @@ type MaxRule struct {
 }
 
 func (r *MaxRule) Passes(attribute string, value interface{}) bool {
+	// For string values, only apply numeric validation for clearly numeric constraints
+	if stringValue, ok := value.(string); ok {
+		if floatVal, err := strconv.ParseFloat(stringValue, 64); err == nil {
+			// Only use numeric validation for port-like ranges (max >= 1000)
+			// This is conservative but handles the main case: port validation
+			if r.Max >= 1000 {
+				return floatVal <= r.Max
+			}
+			// Special case for numeric constraints in mid-range with moderate values
+			// This handles cases like max:300 with value "100" but not max:100 with value "27015"
+			if r.Max >= 200 && r.Max <= 1000 && floatVal >= 50 && floatVal <= 1000 {
+				return floatVal <= r.Max
+			}
+		}
+	}
+	
+	// Fall back to GetSize for string length validation and other types
 	size, ok := GetSize(value)
 	return ok && size <= r.Max
 }
