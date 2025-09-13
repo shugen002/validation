@@ -6333,7 +6333,7 @@
     "name": "pelican-eggs/eggs/game_eggs/steamcmd_servers/stationeers/stationeers_bepinex/egg-stationeers--bep-in-ex.json - World Name",
     "key": "WORLD_NAME",
     "rule": "nullable|string|in:,Moon,Mars,Europa,Europa2,Mimas,Vulcan,Vulcan2,Space,Loulan,Venus",
-    "default": "moon"
+    "default": "Moon"
   },
   {
     "name": "pelican-eggs/eggs/game_eggs/steamcmd_servers/stationeers/stationeers_bepinex/egg-stationeers--bep-in-ex.json - Max Players",
@@ -6393,7 +6393,7 @@
     "name": "pelican-eggs/eggs/game_eggs/steamcmd_servers/stationeers/stationeers_vanilla/egg-stationeers.json - World Name",
     "key": "WORLD_NAME",
     "rule": "nullable|string|in:,Moon,Mars,Europa,Europa2,Mimas,Vulcan,Vulcan2,Space,Loulan,Venus",
-    "default": "moon"
+    "default": "Moon"
   },
   {
     "name": "pelican-eggs/eggs/game_eggs/steamcmd_servers/stationeers/stationeers_vanilla/egg-stationeers.json - Max Players",
