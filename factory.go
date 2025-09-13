@@ -125,6 +125,18 @@ func (f *Factory) parseRule(ruleStr string) Rule {
 	case "boolean", "bool":
 		strict := len(params) > 0 && params[0] == "strict"
 		return &BooleanRule{Strict: strict}
+	case "accepted":
+		return &AcceptedRule{}
+	case "accepted_if":
+		if len(params) >= 2 {
+			return &AcceptedIfRule{Field: params[0], Value: params[1]}
+		}
+	case "declined":
+		return &DeclinedRule{}
+	case "declined_if":
+		if len(params) >= 2 {
+			return &DeclinedIfRule{Field: params[0], Value: params[1]}
+		}
 	case "array":
 		return &ArrayRule{AllowedKeys: params}
 	case "json":
