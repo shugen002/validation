@@ -183,12 +183,24 @@ func (f *Factory) parseRule(ruleStr string) Rule {
 	case "not_in":
 		return &NotInRule{Values: params}
 	case "regex":
-		if len(params) > 0 {
-			return &RegexRule{Pattern: params[0]}
+		if len(parts) > 1 {
+			// For regex, take the entire parameter string as the pattern (don't split on commas)
+			pattern := strings.TrimSpace(parts[1])
+			// Remove surrounding forward slashes if present (common regex delimiter syntax)
+			if len(pattern) >= 2 && pattern[0] == '/' && pattern[len(pattern)-1] == '/' {
+				pattern = pattern[1 : len(pattern)-1]
+			}
+			return &RegexRule{Pattern: pattern}
 		}
 	case "not_regex":
-		if len(params) > 0 {
-			return &NotRegexRule{Pattern: params[0]}
+		if len(parts) > 1 {
+			// For not_regex, take the entire parameter string as the pattern (don't split on commas)
+			pattern := strings.TrimSpace(parts[1])
+			// Remove surrounding forward slashes if present (common regex delimiter syntax)
+			if len(pattern) >= 2 && pattern[0] == '/' && pattern[len(pattern)-1] == '/' {
+				pattern = pattern[1 : len(pattern)-1]
+			}
+			return &NotRegexRule{Pattern: pattern}
 		}
 	case "same":
 		if len(params) > 0 {
