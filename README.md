@@ -2,6 +2,12 @@
 
 An implementation of Laravel's validation framework in Go, providing a comprehensive set of validation rules and features similar to Laravel's validator (excluding database and file validation features).
 
+> [!WARNING]  
+> This is a fully AI coded library, use at your risk.
+
+> [!NOTE]
+> We use the rule and default value from [pelican-eggs/eggs](https://github.com/pelican-eggs/eggs) as a valid test case. And it looks all passed. Feel free to Provide any extra test case using in real world.
+
 ## Features
 
 This library implements all major Laravel validation rules except database and file/image related ones:
