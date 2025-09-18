@@ -323,6 +323,9 @@ rules := map[string]interface{}{
 
 #### Basic Type Rules
 - `required` - Field must be present and not empty
+- `filled` - Field must have a value when present (can be absent)
+- `present` - Field must be present in input (can be empty)
+- `prohibited` - Field must not be present or empty
 - `string` - Must be a string
 - `integer[:strict]` - Must be an integer (strict mode only accepts actual int types)
 - `numeric[:strict]` - Must be numeric (strict mode rejects string numbers)
@@ -356,6 +359,8 @@ rules := map[string]interface{}{
 - `gte:field` - Greater than or equal to another field
 - `lt:field` - Less than another field
 - `lte:field` - Less than or equal to another field
+- `digits:length` - Must be numeric and have exact number of digits
+- `digits_between:min,max` - Must be numeric and have digit count between min and max
 
 #### List Rules
 - `in:value1,value2,value3` - Must be one of the specified values
@@ -367,6 +372,10 @@ rules := map[string]interface{}{
 - `confirmed[:field]` - Must have matching confirmation field (defaults to fieldname_confirmation)
 - `accepted_if:field,value` - Must be accepted if another field equals the specified value
 - `declined_if:field,value` - Must be declined if another field equals the specified value
+- `required_if:field,value` - Field is required when another field equals specified value
+- `required_unless:field,value` - Field is required unless another field equals specified value
+- `required_with:field1,field2` - Field is required when any of the other fields are present
+- `required_without:field1,field2` - Field is required when any of the other fields are not present
 
 #### Date Rules
 - `date` - Must be a valid date

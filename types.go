@@ -17,6 +17,7 @@ type Validator interface {
 	AddRule(field string, rules ...Rule) Validator
 	Sometimes(field string, rules []Rule, callback func(data map[string]interface{}) bool) Validator
 	StopOnFirstFailure() Validator
+	HasField(field string) bool
 }
 
 // Rule interface defines a validation rule

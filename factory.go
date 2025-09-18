@@ -292,6 +292,38 @@ func (f *Factory) parseRule(ruleStr string) Rule {
 		return &SometimesRule{}
 	case "bail":
 		return &BailRule{}
+	case "digits":
+		if len(params) > 0 {
+			if length, err := strconv.Atoi(params[0]); err == nil {
+				return &DigitsRule{Length: length}
+			}
+		}
+	case "digits_between":
+		if len(params) >= 2 {
+			if min, err1 := strconv.Atoi(params[0]); err1 == nil {
+				if max, err2 := strconv.Atoi(params[1]); err2 == nil {
+					return &DigitsBetweenRule{Min: min, Max: max}
+				}
+			}
+		}
+	case "filled":
+		return &FilledRule{}
+	case "present":
+		return &PresentRule{}
+	case "prohibited":
+		return &ProhibitedRule{}
+	case "required_if":
+		if len(params) >= 2 {
+			return &RequiredIfRule{Field: params[0], Value: params[1]}
+		}
+	case "required_unless":
+		if len(params) >= 2 {
+			return &RequiredUnlessRule{Field: params[0], Value: params[1]}
+		}
+	case "required_with":
+		return &RequiredWithRule{Fields: params}
+	case "required_without":
+		return &RequiredWithoutRule{Fields: params}
 	}
 	
 	return nil
