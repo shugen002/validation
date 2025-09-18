@@ -3,6 +3,7 @@ package validation
 import (
 	"net"
 	"net/url"
+	"reflect"
 	"regexp"
 	"strings"
 	"time"
@@ -632,4 +633,256 @@ func (r *HexColorRule) Passes(attribute string, value interface{}) bool {
 
 func (r *HexColorRule) Message() string {
 	return "The :attribute must be a valid hex color."
+}
+
+// Conditional required rules
+
+// RequiredIfRule validates that a field is required when another field equals a specific value
+type RequiredIfRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+}
+
+func (r *RequiredIfRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the required value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field is required, check if it's present and not empty
+			if IsNil(value) {
+				return false
+			}
+			
+			switch v := value.(type) {
+			case string:
+				return strings.TrimSpace(v) != ""
+			case []interface{}, map[string]interface{}:
+				return reflect.ValueOf(v).Len() > 0
+			default:
+				rv := reflect.ValueOf(value)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					return rv.Len() > 0
+				}
+			}
+			
+			return true
+		}
+	}
+	
+	// Field is not required in this case
+	return true
+}
+
+func (r *RequiredIfRule) Message() string {
+	return "The :attribute field is required when " + r.Field + " is " + r.Value + "."
+}
+
+func (r *RequiredIfRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredIfRule) IsImplicit() bool {
+	return true
+}
+
+// RequiredUnlessRule validates that a field is required unless another field equals a specific value
+type RequiredUnlessRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+}
+
+func (r *RequiredUnlessRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the exception value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field is not required in this case
+			return true
+		}
+	}
+	
+	// Field is required, check if it's present and not empty
+	if IsNil(value) {
+		return false
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) != ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() > 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() > 0
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredUnlessRule) Message() string {
+	return "The :attribute field is required unless " + r.Field + " is " + r.Value + "."
+}
+
+func (r *RequiredUnlessRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredUnlessRule) IsImplicit() bool {
+	return true
+}
+
+// RequiredWithRule validates that a field is required when any of the other specified fields are present
+type RequiredWithRule struct {
+	Fields []string
+	data   map[string]interface{}
+}
+
+func (r *RequiredWithRule) Passes(attribute string, value interface{}) bool {
+	// Check if any of the specified fields are present and not empty
+	anyFieldPresent := false
+	for _, field := range r.Fields {
+		if fieldValue, exists := r.data[field]; exists && !IsNil(fieldValue) {
+			switch v := fieldValue.(type) {
+			case string:
+				if strings.TrimSpace(v) != "" {
+					anyFieldPresent = true
+					break
+				}
+			case []interface{}, map[string]interface{}:
+				if reflect.ValueOf(v).Len() > 0 {
+					anyFieldPresent = true
+					break
+				}
+			default:
+				rv := reflect.ValueOf(fieldValue)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					if rv.Len() > 0 {
+						anyFieldPresent = true
+						break
+					}
+				default:
+					anyFieldPresent = true
+					break
+				}
+			}
+		}
+	}
+	
+	if !anyFieldPresent {
+		// None of the fields are present, so this field is not required
+		return true
+	}
+	
+	// At least one field is present, so this field is required
+	if IsNil(value) {
+		return false
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) != ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() > 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() > 0
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredWithRule) Message() string {
+	return "The :attribute field is required when " + strings.Join(r.Fields, ", ") + " are present."
+}
+
+func (r *RequiredWithRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredWithRule) IsImplicit() bool {
+	return true
+}
+
+// RequiredWithoutRule validates that a field is required when any of the other specified fields are not present
+type RequiredWithoutRule struct {
+	Fields []string
+	data   map[string]interface{}
+}
+
+func (r *RequiredWithoutRule) Passes(attribute string, value interface{}) bool {
+	// Check if any of the specified fields are missing or empty
+	anyFieldMissing := false
+	for _, field := range r.Fields {
+		if fieldValue, exists := r.data[field]; !exists || IsNil(fieldValue) {
+			anyFieldMissing = true
+			break
+		} else {
+			switch v := fieldValue.(type) {
+			case string:
+				if strings.TrimSpace(v) == "" {
+					anyFieldMissing = true
+					break
+				}
+			case []interface{}, map[string]interface{}:
+				if reflect.ValueOf(v).Len() == 0 {
+					anyFieldMissing = true
+					break
+				}
+			default:
+				rv := reflect.ValueOf(fieldValue)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					if rv.Len() == 0 {
+						anyFieldMissing = true
+						break
+					}
+				}
+			}
+		}
+	}
+	
+	if !anyFieldMissing {
+		// All fields are present, so this field is not required
+		return true
+	}
+	
+	// At least one field is missing, so this field is required
+	if IsNil(value) {
+		return false
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) != ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() > 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() > 0
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredWithoutRule) Message() string {
+	return "The :attribute field is required when " + strings.Join(r.Fields, ", ") + " are not present."
+}
+
+func (r *RequiredWithoutRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredWithoutRule) IsImplicit() bool {
+	return true
 }

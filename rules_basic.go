@@ -774,3 +774,143 @@ func (r *BailRule) Passes(attribute string, value interface{}) bool {
 func (r *BailRule) Message() string {
 	return ""
 }
+
+// DigitsRule validates that a field is numeric and has an exact number of digits
+type DigitsRule struct {
+	Length int
+}
+
+func (r *DigitsRule) Passes(attribute string, value interface{}) bool {
+	str := fmt.Sprintf("%v", value)
+	
+	// Remove any non-digit characters and check if it's all digits
+	digits := ""
+	for _, char := range str {
+		if unicode.IsDigit(char) {
+			digits += string(char)
+		}
+	}
+	
+	// Check if original string was all digits and has exact length
+	return len(digits) == len(str) && len(digits) == r.Length
+}
+
+func (r *DigitsRule) Message() string {
+	return fmt.Sprintf("The :attribute must be %d digits.", r.Length)
+}
+
+// DigitsBetweenRule validates that a field is numeric and has digit count between min and max
+type DigitsBetweenRule struct {
+	Min int
+	Max int
+}
+
+func (r *DigitsBetweenRule) Passes(attribute string, value interface{}) bool {
+	str := fmt.Sprintf("%v", value)
+	
+	// Remove any non-digit characters and check if it's all digits
+	digits := ""
+	for _, char := range str {
+		if unicode.IsDigit(char) {
+			digits += string(char)
+		}
+	}
+	
+	// Check if original string was all digits and length is within range
+	if len(digits) != len(str) {
+		return false
+	}
+	
+	return len(digits) >= r.Min && len(digits) <= r.Max
+}
+
+func (r *DigitsBetweenRule) Message() string {
+	return fmt.Sprintf("The :attribute must be between %d and %d digits.", r.Min, r.Max)
+}
+
+// FilledRule validates that a field is present and not empty when it is present
+type FilledRule struct{}
+
+func (r *FilledRule) Passes(attribute string, value interface{}) bool {
+	if IsNil(value) {
+		return true // Field can be absent
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) != ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() > 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() > 0
+		}
+	}
+	
+	return true
+}
+
+func (r *FilledRule) Message() string {
+	return "The :attribute field must have a value when present."
+}
+
+// PresentRule validates that a field is present in the input (can be empty)
+type PresentRule struct {
+	validator Validator
+}
+
+func (r *PresentRule) Passes(attribute string, value interface{}) bool {
+	// Check if the field exists in the data using the validator
+	if r.validator != nil {
+		return r.validator.HasField(attribute)
+	}
+	
+	// If this method is called without a validator, assume the field is present (fallback)
+	return true
+}
+
+func (r *PresentRule) Message() string {
+	return "The :attribute field must be present."
+}
+
+func (r *PresentRule) IsImplicit() bool {
+	return true
+}
+
+func (r *PresentRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+// ProhibitedRule validates that a field is not present or is empty
+type ProhibitedRule struct{}
+
+func (r *ProhibitedRule) Passes(attribute string, value interface{}) bool {
+	if IsNil(value) {
+		return true
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) == ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() == 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() == 0
+		}
+	}
+	
+	return false
+}
+
+func (r *ProhibitedRule) Message() string {
+	return "The :attribute field is prohibited."
+}
+
+func (r *ProhibitedRule) IsImplicit() bool {
+	return true
+}

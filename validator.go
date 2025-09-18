@@ -184,6 +184,11 @@ func (v *validator) hasField(field string) bool {
 	return exists
 }
 
+// HasField checks if a field exists in the data (public method)
+func (v *validator) HasField(field string) bool {
+	return v.hasField(field)
+}
+
 // getValue gets the value of a field
 func (v *validator) getValue(field string) interface{} {
 	if strings.Contains(field, ".") {
