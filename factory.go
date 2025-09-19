@@ -324,6 +324,93 @@ func (f *Factory) parseRule(ruleStr string) Rule {
 		return &RequiredWithRule{Fields: params}
 	case "required_without":
 		return &RequiredWithoutRule{Fields: params}
+	case "decimal":
+		if len(params) == 1 {
+			if places, err := strconv.Atoi(params[0]); err == nil {
+				return &DecimalRule{Min: places, Max: 0}
+			}
+		} else if len(params) >= 2 {
+			if min, err1 := strconv.Atoi(params[0]); err1 == nil {
+				if max, err2 := strconv.Atoi(params[1]); err2 == nil {
+					return &DecimalRule{Min: min, Max: max}
+				}
+			}
+		}
+	case "distinct":
+		strict := false
+		ignoreCase := false
+		for _, param := range params {
+			if param == "strict" {
+				strict = true
+			} else if param == "ignore_case" {
+				ignoreCase = true
+			}
+		}
+		return &DistinctRule{Strict: strict, IgnoreCase: ignoreCase}
+	case "min_digits":
+		if len(params) > 0 {
+			if min, err := strconv.Atoi(params[0]); err == nil {
+				return &MinDigitsRule{Min: min}
+			}
+		}
+	case "multiple_of":
+		if len(params) > 0 {
+			if value, err := strconv.ParseFloat(params[0], 64); err == nil {
+				return &MultipleOfRule{Value: value}
+			}
+		}
+	case "missing":
+		return &MissingRule{}
+	case "missing_if":
+		if len(params) >= 2 {
+			return &MissingIfRule{Field: params[0], Value: params[1]}
+		}
+	case "missing_unless":
+		if len(params) >= 2 {
+			return &MissingUnlessRule{Field: params[0], Value: params[1]}
+		}
+	case "missing_with":
+		return &MissingWithRule{Fields: params}
+	case "missing_with_all":
+		return &MissingWithAllRule{Fields: params}
+	case "present_if":
+		if len(params) >= 2 {
+			return &PresentIfRule{Field: params[0], Value: params[1]}
+		}
+	case "present_unless":
+		if len(params) >= 2 {
+			return &PresentUnlessRule{Field: params[0], Value: params[1]}
+		}
+	case "present_with":
+		return &PresentWithRule{Fields: params}
+	case "present_with_all":
+		return &PresentWithAllRule{Fields: params}
+	case "prohibited_if_accepted":
+		if len(params) > 0 {
+			return &ProhibitedIfAcceptedRule{Field: params[0]}
+		}
+	case "prohibited_if_declined":
+		if len(params) > 0 {
+			return &ProhibitedIfDeclinedRule{Field: params[0]}
+		}
+	case "prohibited_unless":
+		if len(params) >= 2 {
+			return &ProhibitedUnlessRule{Field: params[0], Value: params[1]}
+		}
+	case "prohibits":
+		return &ProhibitsRule{Fields: params}
+	case "required_if_accepted":
+		if len(params) > 0 {
+			return &RequiredIfAcceptedRule{Field: params[0]}
+		}
+	case "required_if_declined":
+		if len(params) > 0 {
+			return &RequiredIfDeclinedRule{Field: params[0]}
+		}
+	case "required_with_all":
+		return &RequiredWithAllRule{Fields: params}
+	case "required_array_keys":
+		return &RequiredArrayKeysRule{Keys: params}
 	}
 	
 	return nil

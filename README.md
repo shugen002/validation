@@ -325,7 +325,20 @@ rules := map[string]interface{}{
 - `required` - Field must be present and not empty
 - `filled` - Field must have a value when present (can be absent)
 - `present` - Field must be present in input (can be empty)
+- `present_if:field,value` - Field must be present when another field equals specified value
+- `present_unless:field,value` - Field must be present unless another field equals specified value
+- `present_with:field1,field2` - Field must be present when any other fields are present
+- `present_with_all:field1,field2` - Field must be present when all other fields are present
 - `prohibited` - Field must not be present or empty
+- `prohibited_if_accepted:field` - Field must be prohibited when another field is accepted
+- `prohibited_if_declined:field` - Field must be prohibited when another field is declined
+- `prohibited_unless:field,value` - Field must be prohibited unless another field equals specified value
+- `prohibits:field1,field2` - If present, prohibits other fields from being present
+- `missing` - Field must not be present
+- `missing_if:field,value` - Field must not be present when another field equals specified value
+- `missing_unless:field,value` - Field must not be present unless another field equals specified value
+- `missing_with:field1,field2` - Field must not be present when any other fields are present
+- `missing_with_all:field1,field2` - Field must not be present when all other fields are present
 - `string` - Must be a string
 - `integer[:strict]` - Must be an integer (strict mode only accepts actual int types)
 - `numeric[:strict]` - Must be numeric (strict mode rejects string numbers)
@@ -361,10 +374,17 @@ rules := map[string]interface{}{
 - `lte:field` - Less than or equal to another field
 - `digits:length` - Must be numeric and have exact number of digits
 - `digits_between:min,max` - Must be numeric and have digit count between min and max
+- `min_digits:value` - Must have minimum number of digits
+- `decimal:places` - Must have exactly the specified number of decimal places
+- `decimal:min,max` - Must have decimal places between min and max
+- `multiple_of:value` - Must be a multiple of the specified value
 
 #### List Rules
 - `in:value1,value2,value3` - Must be one of the specified values
 - `not_in:value1,value2,value3` - Must not be one of the specified values
+- `distinct` - Array values must be unique (loose comparison)
+- `distinct:strict` - Array values must be unique (strict comparison)
+- `distinct:ignore_case` - Array values must be unique (case-insensitive)
 
 #### Field Relationship Rules
 - `same:field` - Must be the same as another field
@@ -376,6 +396,10 @@ rules := map[string]interface{}{
 - `required_unless:field,value` - Field is required unless another field equals specified value
 - `required_with:field1,field2` - Field is required when any of the other fields are present
 - `required_without:field1,field2` - Field is required when any of the other fields are not present
+- `required_with_all:field1,field2` - Field is required when all of the other fields are present
+- `required_if_accepted:field` - Field is required when another field is accepted
+- `required_if_declined:field` - Field is required when another field is declined
+- `required_array_keys:key1,key2` - Array must contain the specified keys
 
 #### Date Rules
 - `date` - Must be a valid date
