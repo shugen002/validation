@@ -1023,8 +1023,8 @@ func TestNetworkRules(t *testing.T) {
 
 func TestRealWorldRules(t *testing.T) {
 	factory := NewFactory()
-	// read from tests/variables.json
-	file, err := os.ReadFile("tests/variables.json")
+	// read from testdata/variables.json
+	file, err := os.ReadFile("testdata/variables.json")
 	if err != nil {
 		t.Fatalf("Failed to read variables.json: %v", err)
 	}
