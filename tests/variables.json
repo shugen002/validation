@@ -111,7 +111,7 @@
     "name": "pelican-eggs/eggs/bots/discord/jmusicbot/egg-j-music-bot.json - [REQUIRED] Bot Owner ID",
     "key": "BOT_OWNER",
     "rule": "required|digits_between:17,18",
-    "default": "Change This To Your Discord User ID"
+    "default": "123456789012345678"
   },
   {
     "name": "pelican-eggs/eggs/bots/discord/jmusicbot/egg-j-music-bot.json - Bot Prefix",
