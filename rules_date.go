@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"strings"
 	"time"
 )
 
@@ -56,7 +57,9 @@ func (r *DateFormatRule) Passes(attribute string, value interface{}) bool {
 	}
 	
 	for _, format := range r.Formats {
-		if _, err := time.Parse(format, str); err == nil {
+		// Convert Laravel/PHP format to Go format
+		goFormat := r.convertPHPDateFormat(format)
+		if _, err := time.Parse(goFormat, str); err == nil {
 			return true
 		}
 	}
@@ -66,6 +69,32 @@ func (r *DateFormatRule) Passes(attribute string, value interface{}) bool {
 
 func (r *DateFormatRule) Message() string {
 	return "The :attribute does not match the required format."
+}
+
+// convertPHPDateFormat converts PHP date format to Go date format
+func (r *DateFormatRule) convertPHPDateFormat(phpFormat string) string {
+	// Basic conversion map from PHP to Go date format
+	replacements := map[string]string{
+		"Y": "2006",
+		"y": "06",
+		"m": "01",
+		"n": "1",
+		"d": "02",
+		"j": "2",
+		"H": "15",
+		"h": "03",
+		"i": "04",
+		"s": "05",
+		"A": "PM",
+		"a": "pm",
+	}
+	
+	result := phpFormat
+	for php, go_ := range replacements {
+		result = strings.ReplaceAll(result, php, go_)
+	}
+	
+	return result
 }
 
 // AfterRule validates that a field is after a specified date or field value
