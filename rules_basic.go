@@ -3,6 +3,7 @@ package validation
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/mail"
 	"reflect"
 	"regexp"
@@ -913,4 +914,199 @@ func (r *ProhibitedRule) Message() string {
 
 func (r *ProhibitedRule) IsImplicit() bool {
 	return true
+}
+
+// DecimalRule validates that a field is numeric and has specified decimal places
+type DecimalRule struct {
+	Min int
+	Max int
+}
+
+func (r *DecimalRule) Passes(attribute string, value interface{}) bool {
+	str := ToString(value)
+	if str == "" {
+		return false
+	}
+	
+	// Check if it's a valid number
+	num, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		return false
+	}
+	
+	// Handle negative numbers
+	if num < 0 {
+		str = strings.TrimPrefix(str, "-")
+	}
+	
+	// Find decimal point
+	parts := strings.Split(str, ".")
+	
+	if len(parts) == 1 {
+		// No decimal point - has 0 decimal places
+		if r.Max == 0 {
+			return r.Min == 0
+		}
+		return r.Min <= 0 && 0 <= r.Max
+	}
+	
+	if len(parts) > 2 {
+		// Multiple decimal points - invalid
+		return false
+	}
+	
+	decimalPlaces := len(parts[1])
+	
+	if r.Max == 0 {
+		// Only one value specified - exact match required
+		return decimalPlaces == r.Min
+	}
+	
+	// Range specified
+	return decimalPlaces >= r.Min && decimalPlaces <= r.Max
+}
+
+func (r *DecimalRule) Message() string {
+	if r.Max == 0 {
+		return fmt.Sprintf("The :attribute must have exactly %d decimal places.", r.Min)
+	}
+	return fmt.Sprintf("The :attribute must have between %d and %d decimal places.", r.Min, r.Max)
+}
+
+// DistinctRule validates that array values are unique
+type DistinctRule struct {
+	Strict     bool
+	IgnoreCase bool
+}
+
+func (r *DistinctRule) Passes(attribute string, value interface{}) bool {
+	rv := reflect.ValueOf(value)
+	if rv.Kind() != reflect.Slice && rv.Kind() != reflect.Array {
+		return false
+	}
+	
+	seen := make(map[string]bool)
+	
+	for i := 0; i < rv.Len(); i++ {
+		item := rv.Index(i).Interface()
+		key := r.getKey(item)
+		
+		if seen[key] {
+			return false
+		}
+		seen[key] = true
+	}
+	
+	return true
+}
+
+func (r *DistinctRule) getKey(value interface{}) string {
+	var str string
+	
+	if r.Strict {
+		// Include type information for strict comparison
+		str = fmt.Sprintf("%T:%v", value, value)
+	} else {
+		str = fmt.Sprintf("%v", value)
+	}
+	
+	if r.IgnoreCase {
+		str = strings.ToLower(str)
+	}
+	
+	return str
+}
+
+func (r *DistinctRule) Message() string {
+	return "The :attribute field has duplicate values."
+}
+
+// MinDigitsRule validates minimum number of digits
+type MinDigitsRule struct {
+	Min int
+}
+
+func (r *MinDigitsRule) Passes(attribute string, value interface{}) bool {
+	str := fmt.Sprintf("%v", value)
+	
+	// Count digits
+	digitCount := 0
+	for _, char := range str {
+		if unicode.IsDigit(char) {
+			digitCount++
+		}
+	}
+	
+	// For integer validation, the string should be all digits (possibly with negative sign)
+	if strings.HasPrefix(str, "-") {
+		str = str[1:]
+	}
+	
+	// Check if it's all digits
+	allDigits := true
+	for _, char := range str {
+		if !unicode.IsDigit(char) {
+			allDigits = false
+			break
+		}
+	}
+	
+	if !allDigits {
+		return false
+	}
+	
+	return digitCount >= r.Min
+}
+
+func (r *MinDigitsRule) Message() string {
+	return fmt.Sprintf("The :attribute must have at least %d digits.", r.Min)
+}
+
+// MultipleOfRule validates that a field is a multiple of a given value
+type MultipleOfRule struct {
+	Value float64
+}
+
+func (r *MultipleOfRule) Passes(attribute string, value interface{}) bool {
+	num, err := strconv.ParseFloat(ToString(value), 64)
+	if err != nil {
+		return false
+	}
+	
+	if r.Value == 0 {
+		return false
+	}
+	
+	// Check if num is a multiple of Value
+	remainder := math.Mod(num, r.Value)
+	return math.Abs(remainder) < 1e-9 // Handle floating point precision
+}
+
+func (r *MultipleOfRule) Message() string {
+	return fmt.Sprintf("The :attribute must be a multiple of %g.", r.Value)
+}
+
+// MissingRule validates that a field is not present
+type MissingRule struct {
+	validator Validator
+}
+
+func (r *MissingRule) Passes(attribute string, value interface{}) bool {
+	if r.validator != nil {
+		return !r.validator.HasField(attribute)
+	}
+	// If this method is called, the field is present (fallback)
+	return false
+}
+
+func (r *MissingRule) Message() string {
+	return "The :attribute field must not be present."
+}
+
+func (r *MissingRule) IsImplicit() bool {
+	return true
+}
+
+func (r *MissingRule) SetValidator(validator Validator) {
+	r.validator = validator
 }

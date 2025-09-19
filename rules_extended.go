@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"fmt"
 	"net"
 	"net/url"
 	"reflect"
@@ -885,4 +886,815 @@ func (r *RequiredWithoutRule) SetData(data map[string]interface{}) {
 
 func (r *RequiredWithoutRule) IsImplicit() bool {
 	return true
+}
+
+// MissingIfRule validates that a field is not present when another field equals a value
+type MissingIfRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+	validator Validator
+}
+
+func (r *MissingIfRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the required value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field should be missing
+			if r.validator != nil {
+				return !r.validator.HasField(attribute)
+			}
+			return false // If we're here, field is present
+		}
+	}
+	
+	// Condition not met, field can be present or absent
+	return true
+}
+
+func (r *MissingIfRule) Message() string {
+	return "The :attribute field must not be present when " + r.Field + " is " + r.Value + "."
+}
+
+func (r *MissingIfRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *MissingIfRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *MissingIfRule) IsImplicit() bool {
+	return true
+}
+
+// MissingUnlessRule validates that a field is not present unless another field equals a value
+type MissingUnlessRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+	validator Validator
+}
+
+func (r *MissingUnlessRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the exception value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field can be present
+			return true
+		}
+	}
+	
+	// Field should be missing
+	if r.validator != nil {
+		return !r.validator.HasField(attribute)
+	}
+	return false // If we're here, field is present
+}
+
+func (r *MissingUnlessRule) Message() string {
+	return "The :attribute field must not be present unless " + r.Field + " is " + r.Value + "."
+}
+
+func (r *MissingUnlessRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *MissingUnlessRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *MissingUnlessRule) IsImplicit() bool {
+	return true
+}
+
+// MissingWithRule validates that a field is not present when other fields are present
+type MissingWithRule struct {
+	Fields []string
+	data   map[string]interface{}
+	validator Validator
+}
+
+func (r *MissingWithRule) Passes(attribute string, value interface{}) bool {
+	// Check if any of the specified fields are present
+	anyFieldPresent := false
+	for _, field := range r.Fields {
+		if _, exists := r.data[field]; exists {
+			anyFieldPresent = true
+			break
+		}
+	}
+	
+	if !anyFieldPresent {
+		// No dependency fields present, this field can be present or absent
+		return true
+	}
+	
+	// At least one dependency field is present, this field should be missing
+	if r.validator != nil {
+		return !r.validator.HasField(attribute)
+	}
+	return false // If we're here, field is present
+}
+
+func (r *MissingWithRule) Message() string {
+	return "The :attribute field must not be present when " + strings.Join(r.Fields, ", ") + " are present."
+}
+
+func (r *MissingWithRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *MissingWithRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *MissingWithRule) IsImplicit() bool {
+	return true
+}
+
+// MissingWithAllRule validates that a field is not present when all other fields are present
+type MissingWithAllRule struct {
+	Fields []string
+	data   map[string]interface{}
+	validator Validator
+}
+
+func (r *MissingWithAllRule) Passes(attribute string, value interface{}) bool {
+	// Check if all specified fields are present
+	allFieldsPresent := true
+	for _, field := range r.Fields {
+		if _, exists := r.data[field]; !exists {
+			allFieldsPresent = false
+			break
+		}
+	}
+	
+	if !allFieldsPresent {
+		// Not all dependency fields present, this field can be present or absent
+		return true
+	}
+	
+	// All dependency fields are present, this field should be missing
+	if r.validator != nil {
+		return !r.validator.HasField(attribute)
+	}
+	return false // If we're here, field is present
+}
+
+func (r *MissingWithAllRule) Message() string {
+	return "The :attribute field must not be present when all of " + strings.Join(r.Fields, ", ") + " are present."
+}
+
+func (r *MissingWithAllRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *MissingWithAllRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *MissingWithAllRule) IsImplicit() bool {
+	return true
+}
+
+// PresentIfRule validates that a field is present when another field equals a value
+type PresentIfRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+	validator Validator
+}
+
+func (r *PresentIfRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the required value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field must be present
+			if r.validator != nil {
+				return r.validator.HasField(attribute)
+			}
+			return true // If we're here, field is present
+		}
+	}
+	
+	// Condition not met, field can be present or absent
+	return true
+}
+
+func (r *PresentIfRule) Message() string {
+	return "The :attribute field must be present when " + r.Field + " is " + r.Value + "."
+}
+
+func (r *PresentIfRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *PresentIfRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *PresentIfRule) IsImplicit() bool {
+	return true
+}
+
+// PresentUnlessRule validates that a field is present unless another field equals a value
+type PresentUnlessRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+	validator Validator
+}
+
+func (r *PresentUnlessRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the exception value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field can be absent
+			return true
+		}
+	}
+	
+	// Field must be present
+	if r.validator != nil {
+		return r.validator.HasField(attribute)
+	}
+	return true // If we're here, field is present
+}
+
+func (r *PresentUnlessRule) Message() string {
+	return "The :attribute field must be present unless " + r.Field + " is " + r.Value + "."
+}
+
+func (r *PresentUnlessRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *PresentUnlessRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *PresentUnlessRule) IsImplicit() bool {
+	return true
+}
+
+// PresentWithRule validates that a field is present when other fields are present
+type PresentWithRule struct {
+	Fields []string
+	data   map[string]interface{}
+	validator Validator
+}
+
+func (r *PresentWithRule) Passes(attribute string, value interface{}) bool {
+	// Check if any of the specified fields are present
+	anyFieldPresent := false
+	for _, field := range r.Fields {
+		if _, exists := r.data[field]; exists {
+			anyFieldPresent = true
+			break
+		}
+	}
+	
+	if !anyFieldPresent {
+		// No dependency fields present, this field can be present or absent
+		return true
+	}
+	
+	// At least one dependency field is present, this field must be present
+	if r.validator != nil {
+		return r.validator.HasField(attribute)
+	}
+	return true // If we're here, field is present
+}
+
+func (r *PresentWithRule) Message() string {
+	return "The :attribute field must be present when " + strings.Join(r.Fields, ", ") + " are present."
+}
+
+func (r *PresentWithRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *PresentWithRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *PresentWithRule) IsImplicit() bool {
+	return true
+}
+
+// PresentWithAllRule validates that a field is present when all other fields are present
+type PresentWithAllRule struct {
+	Fields []string
+	data   map[string]interface{}
+	validator Validator
+}
+
+func (r *PresentWithAllRule) Passes(attribute string, value interface{}) bool {
+	// Check if all specified fields are present
+	allFieldsPresent := true
+	for _, field := range r.Fields {
+		if _, exists := r.data[field]; !exists {
+			allFieldsPresent = false
+			break
+		}
+	}
+	
+	if !allFieldsPresent {
+		// Not all dependency fields present, this field can be present or absent
+		return true
+	}
+	
+	// All dependency fields are present, this field must be present
+	if r.validator != nil {
+		return r.validator.HasField(attribute)
+	}
+	return true // If we're here, field is present
+}
+
+func (r *PresentWithAllRule) Message() string {
+	return "The :attribute field must be present when all of " + strings.Join(r.Fields, ", ") + " are present."
+}
+
+func (r *PresentWithAllRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *PresentWithAllRule) SetValidator(validator Validator) {
+	r.validator = validator
+}
+
+func (r *PresentWithAllRule) IsImplicit() bool {
+	return true
+}
+
+// ProhibitedIfAcceptedRule validates that field is prohibited if another field is accepted
+type ProhibitedIfAcceptedRule struct {
+	Field string
+	data  map[string]interface{}
+}
+
+func (r *ProhibitedIfAcceptedRule) Passes(attribute string, value interface{}) bool {
+	if fieldValue, exists := r.data[r.Field]; exists {
+		// Check if field is accepted
+		accepted := false
+		switch v := fieldValue.(type) {
+		case bool:
+			accepted = v
+		case string:
+			accepted = v == "yes" || v == "on" || v == "1" || v == "true"
+		case int, int8, int16, int32, int64:
+			accepted = reflect.ValueOf(v).Int() == 1
+		case uint, uint8, uint16, uint32, uint64:
+			accepted = reflect.ValueOf(v).Uint() == 1
+		case float32, float64:
+			accepted = reflect.ValueOf(v).Float() == 1
+		}
+		
+		if accepted {
+			// Field should be prohibited (missing or empty)
+			if IsNil(value) {
+				return true
+			}
+			
+			switch v := value.(type) {
+			case string:
+				return strings.TrimSpace(v) == ""
+			case []interface{}, map[string]interface{}:
+				return reflect.ValueOf(v).Len() == 0
+			default:
+				rv := reflect.ValueOf(value)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					return rv.Len() == 0
+				}
+			}
+			
+			return false
+		}
+	}
+	
+	return true
+}
+
+func (r *ProhibitedIfAcceptedRule) Message() string {
+	return "The :attribute field is prohibited when " + r.Field + " is accepted."
+}
+
+func (r *ProhibitedIfAcceptedRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *ProhibitedIfAcceptedRule) IsImplicit() bool {
+	return true
+}
+
+// ProhibitedIfDeclinedRule validates that field is prohibited if another field is declined
+type ProhibitedIfDeclinedRule struct {
+	Field string
+	data  map[string]interface{}
+}
+
+func (r *ProhibitedIfDeclinedRule) Passes(attribute string, value interface{}) bool {
+	if fieldValue, exists := r.data[r.Field]; exists {
+		// Check if field is declined
+		declined := false
+		switch v := fieldValue.(type) {
+		case bool:
+			declined = !v
+		case string:
+			declined = v == "no" || v == "off" || v == "0" || v == "false"
+		case int, int8, int16, int32, int64:
+			declined = reflect.ValueOf(v).Int() == 0
+		case uint, uint8, uint16, uint32, uint64:
+			declined = reflect.ValueOf(v).Uint() == 0
+		case float32, float64:
+			declined = reflect.ValueOf(v).Float() == 0
+		}
+		
+		if declined {
+			// Field should be prohibited (missing or empty)
+			if IsNil(value) {
+				return true
+			}
+			
+			switch v := value.(type) {
+			case string:
+				return strings.TrimSpace(v) == ""
+			case []interface{}, map[string]interface{}:
+				return reflect.ValueOf(v).Len() == 0
+			default:
+				rv := reflect.ValueOf(value)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					return rv.Len() == 0
+				}
+			}
+			
+			return false
+		}
+	}
+	
+	return true
+}
+
+func (r *ProhibitedIfDeclinedRule) Message() string {
+	return "The :attribute field is prohibited when " + r.Field + " is declined."
+}
+
+func (r *ProhibitedIfDeclinedRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *ProhibitedIfDeclinedRule) IsImplicit() bool {
+	return true
+}
+
+// ProhibitedUnlessRule validates that field is prohibited unless another field equals a value
+type ProhibitedUnlessRule struct {
+	Field string
+	Value string
+	data  map[string]interface{}
+}
+
+func (r *ProhibitedUnlessRule) Passes(attribute string, value interface{}) bool {
+	// Check if the condition field equals the exception value
+	if fieldValue, exists := r.data[r.Field]; exists {
+		if ToString(fieldValue) == r.Value {
+			// Field is not prohibited in this case
+			return true
+		}
+	}
+	
+	// Field should be prohibited (missing or empty)
+	if IsNil(value) {
+		return true
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) == ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() == 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() == 0
+		}
+	}
+	
+	return false
+}
+
+func (r *ProhibitedUnlessRule) Message() string {
+	return "The :attribute field is prohibited unless " + r.Field + " is " + r.Value + "."
+}
+
+func (r *ProhibitedUnlessRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *ProhibitedUnlessRule) IsImplicit() bool {
+	return true
+}
+
+// ProhibitsRule validates that if field is present, other fields must be prohibited
+type ProhibitsRule struct {
+	Fields []string
+	data   map[string]interface{}
+}
+
+func (r *ProhibitsRule) Passes(attribute string, value interface{}) bool {
+	// Check if this field is missing or empty
+	if IsNil(value) {
+		return true
+	}
+	
+	isEmpty := false
+	switch v := value.(type) {
+	case string:
+		isEmpty = strings.TrimSpace(v) == ""
+	case []interface{}, map[string]interface{}:
+		isEmpty = reflect.ValueOf(v).Len() == 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			isEmpty = rv.Len() == 0
+		}
+	}
+	
+	if isEmpty {
+		return true
+	}
+	
+	// This field is present and not empty, check that all prohibited fields are missing or empty
+	for _, field := range r.Fields {
+		if fieldValue, exists := r.data[field]; exists && !IsNil(fieldValue) {
+			// Check if the field is empty
+			fieldEmpty := false
+			switch v := fieldValue.(type) {
+			case string:
+				fieldEmpty = strings.TrimSpace(v) == ""
+			case []interface{}, map[string]interface{}:
+				fieldEmpty = reflect.ValueOf(v).Len() == 0
+			default:
+				rv := reflect.ValueOf(fieldValue)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					fieldEmpty = rv.Len() == 0
+				}
+			}
+			
+			if !fieldEmpty {
+				return false
+			}
+		}
+	}
+	
+	return true
+}
+
+func (r *ProhibitsRule) Message() string {
+	return "The :attribute field prohibits " + strings.Join(r.Fields, ", ") + " from being present."
+}
+
+func (r *ProhibitsRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+// RequiredIfAcceptedRule validates that field is required if another field is accepted
+type RequiredIfAcceptedRule struct {
+	Field string
+	data  map[string]interface{}
+}
+
+func (r *RequiredIfAcceptedRule) Passes(attribute string, value interface{}) bool {
+	if fieldValue, exists := r.data[r.Field]; exists {
+		// Check if field is accepted
+		accepted := false
+		switch v := fieldValue.(type) {
+		case bool:
+			accepted = v
+		case string:
+			accepted = v == "yes" || v == "on" || v == "1" || v == "true"
+		case int, int8, int16, int32, int64:
+			accepted = reflect.ValueOf(v).Int() == 1
+		case uint, uint8, uint16, uint32, uint64:
+			accepted = reflect.ValueOf(v).Uint() == 1
+		case float32, float64:
+			accepted = reflect.ValueOf(v).Float() == 1
+		}
+		
+		if accepted {
+			// Field is required, check if it's present and not empty
+			if IsNil(value) {
+				return false
+			}
+			
+			switch v := value.(type) {
+			case string:
+				return strings.TrimSpace(v) != ""
+			case []interface{}, map[string]interface{}:
+				return reflect.ValueOf(v).Len() > 0
+			default:
+				rv := reflect.ValueOf(value)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					return rv.Len() > 0
+				}
+			}
+			
+			return true
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredIfAcceptedRule) Message() string {
+	return "The :attribute field is required when " + r.Field + " is accepted."
+}
+
+func (r *RequiredIfAcceptedRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredIfAcceptedRule) IsImplicit() bool {
+	return true
+}
+
+// RequiredIfDeclinedRule validates that field is required if another field is declined
+type RequiredIfDeclinedRule struct {
+	Field string
+	data  map[string]interface{}
+}
+
+func (r *RequiredIfDeclinedRule) Passes(attribute string, value interface{}) bool {
+	if fieldValue, exists := r.data[r.Field]; exists {
+		// Check if field is declined
+		declined := false
+		switch v := fieldValue.(type) {
+		case bool:
+			declined = !v
+		case string:
+			declined = v == "no" || v == "off" || v == "0" || v == "false"
+		case int, int8, int16, int32, int64:
+			declined = reflect.ValueOf(v).Int() == 0
+		case uint, uint8, uint16, uint32, uint64:
+			declined = reflect.ValueOf(v).Uint() == 0
+		case float32, float64:
+			declined = reflect.ValueOf(v).Float() == 0
+		}
+		
+		if declined {
+			// Field is required, check if it's present and not empty
+			if IsNil(value) {
+				return false
+			}
+			
+			switch v := value.(type) {
+			case string:
+				return strings.TrimSpace(v) != ""
+			case []interface{}, map[string]interface{}:
+				return reflect.ValueOf(v).Len() > 0
+			default:
+				rv := reflect.ValueOf(value)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					return rv.Len() > 0
+				}
+			}
+			
+			return true
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredIfDeclinedRule) Message() string {
+	return "The :attribute field is required when " + r.Field + " is declined."
+}
+
+func (r *RequiredIfDeclinedRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredIfDeclinedRule) IsImplicit() bool {
+	return true
+}
+
+// RequiredWithAllRule validates that field is required when all other fields are present
+type RequiredWithAllRule struct {
+	Fields []string
+	data   map[string]interface{}
+}
+
+func (r *RequiredWithAllRule) Passes(attribute string, value interface{}) bool {
+	// Check if all specified fields are present and not empty
+	allFieldsPresent := true
+	for _, field := range r.Fields {
+		if fieldValue, exists := r.data[field]; !exists || IsNil(fieldValue) {
+			allFieldsPresent = false
+			break
+		} else {
+			switch v := fieldValue.(type) {
+			case string:
+				if strings.TrimSpace(v) == "" {
+					allFieldsPresent = false
+					break
+				}
+			case []interface{}, map[string]interface{}:
+				if reflect.ValueOf(v).Len() == 0 {
+					allFieldsPresent = false
+					break
+				}
+			default:
+				rv := reflect.ValueOf(fieldValue)
+				switch rv.Kind() {
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+					if rv.Len() == 0 {
+						allFieldsPresent = false
+						break
+					}
+				}
+			}
+		}
+	}
+	
+	if !allFieldsPresent {
+		// Not all fields are present, so this field is not required
+		return true
+	}
+	
+	// All fields are present, so this field is required
+	if IsNil(value) {
+		return false
+	}
+	
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v) != ""
+	case []interface{}, map[string]interface{}:
+		return reflect.ValueOf(v).Len() > 0
+	default:
+		rv := reflect.ValueOf(value)
+		switch rv.Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map, reflect.Chan:
+			return rv.Len() > 0
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredWithAllRule) Message() string {
+	return "The :attribute field is required when all of " + strings.Join(r.Fields, ", ") + " are present."
+}
+
+func (r *RequiredWithAllRule) SetData(data map[string]interface{}) {
+	r.data = data
+}
+
+func (r *RequiredWithAllRule) IsImplicit() bool {
+	return true
+}
+
+// RequiredArrayKeysRule validates that array contains required keys
+type RequiredArrayKeysRule struct {
+	Keys []string
+}
+
+func (r *RequiredArrayKeysRule) Passes(attribute string, value interface{}) bool {
+	// Check if value is a map/object
+	rv := reflect.ValueOf(value)
+	if rv.Kind() != reflect.Map {
+		return false
+	}
+	
+	// Convert to map[string]interface{} if possible
+	dataMap, ok := value.(map[string]interface{})
+	if !ok {
+		// Try to convert map to string keys
+		dataMap = make(map[string]interface{})
+		for _, key := range rv.MapKeys() {
+			keyStr := fmt.Sprintf("%v", key.Interface())
+			dataMap[keyStr] = rv.MapIndex(key).Interface()
+		}
+	}
+	
+	// Check all required keys exist
+	for _, requiredKey := range r.Keys {
+		if _, exists := dataMap[requiredKey]; !exists {
+			return false
+		}
+	}
+	
+	return true
+}
+
+func (r *RequiredArrayKeysRule) Message() string {
+	return "The :attribute field must contain the keys: " + strings.Join(r.Keys, ", ") + "."
 }
