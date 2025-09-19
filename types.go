@@ -1,8 +1,10 @@
 package validation
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
+	"strconv"
 )
 
 // Validator interface defines the validation contract
@@ -230,4 +232,52 @@ func GetSize(value interface{}) (float64, bool) {
 	}
 	
 	return 0, false
+}
+
+// IsInteger checks if a value is an integer or can be converted to an integer
+func IsInteger(value interface{}) bool {
+	if value == nil {
+		return false
+	}
+	
+	switch v := value.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return true
+	case float32:
+		return v == float32(int64(v))
+	case float64:
+		return v == float64(int64(v))
+	case string:
+		_, err := strconv.ParseInt(v, 10, 64)
+		return err == nil
+	default:
+		return false
+	}
+}
+
+// IsNumeric checks if a value is numeric or can be converted to a number
+func IsNumeric(value interface{}) bool {
+	if value == nil {
+		return false
+	}
+	
+	switch v := value.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
+		return true
+	case string:
+		_, err := strconv.ParseFloat(v, 64)
+		return err == nil
+	default:
+		return false
+	}
+}
+
+// IsJSON checks if a string is valid JSON
+func IsJSON(str string) bool {
+	if str == "" {
+		return false
+	}
+	
+	var js json.RawMessage
+	return json.Unmarshal([]byte(str), &js) == nil
 }

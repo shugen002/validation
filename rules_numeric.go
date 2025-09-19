@@ -15,8 +15,8 @@ type MinRule struct {
 }
 
 func (r *MinRule) Passes(attribute string, value interface{}) bool {
-	size := GetSize(value)
-	if math.IsNaN(size) {
+	size, ok := GetSize(value)
+	if !ok {
 		return false
 	}
 	return size >= r.Min
@@ -32,8 +32,8 @@ type MaxRule struct {
 }
 
 func (r *MaxRule) Passes(attribute string, value interface{}) bool {
-	size := GetSize(value)
-	if math.IsNaN(size) {
+	size, ok := GetSize(value)
+	if !ok {
 		return false
 	}
 	return size <= r.Max
@@ -50,8 +50,8 @@ type BetweenRule struct {
 }
 
 func (r *BetweenRule) Passes(attribute string, value interface{}) bool {
-	size := GetSize(value)
-	if math.IsNaN(size) {
+	size, ok := GetSize(value)
+	if !ok {
 		return false
 	}
 	return size >= r.Min && size <= r.Max
@@ -67,8 +67,8 @@ type SizeRule struct {
 }
 
 func (r *SizeRule) Passes(attribute string, value interface{}) bool {
-	size := GetSize(value)
-	if math.IsNaN(size) {
+	size, ok := GetSize(value)
+	if !ok {
 		return false
 	}
 	return size == r.Size

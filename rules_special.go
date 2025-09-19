@@ -1,8 +1,6 @@
 package validation
 
 import (
-	"reflect"
-	"regexp"
 	"strconv"
 	"strings"
 
