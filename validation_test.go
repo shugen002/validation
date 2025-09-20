@@ -1024,18 +1024,22 @@ func TestNetworkRules(t *testing.T) {
 func TestRealWorldRules(t *testing.T) {
 	factory := NewFactory()
 	// read from testdata/variables.json
-	file, err := os.ReadFile("testdata/variables.json")
+	file, err := os.ReadFile("testdata/eggs.json")
 	if err != nil {
 		t.Fatalf("Failed to read variables.json: %v", err)
 	}
 
-	var rules []struct {
-		Name    string `json:"name"`
-		Key     string `json:"key"`
-		Rule    string `json:"rule"`
-		Default string `json:"default"`
+	var files []struct {
+		File      string `json:"file"`
+		Variables []struct {
+			Name    string `json:"name"`
+			Key     string `json:"key"`
+			Rule    string `json:"rule"`
+			Default string `json:"default"`
+		}
 	}
-	if err := json.Unmarshal(file, &rules); err != nil {
+
+	if err := json.Unmarshal(file, &files); err != nil {
 		t.Fatalf("Failed to unmarshal variables.json: %v", err)
 	}
 
@@ -1046,20 +1050,24 @@ func TestRealWorldRules(t *testing.T) {
 		valid bool
 	}{}
 
-	for _, r := range rules {
+	for _, r := range files {
+		rules := map[string]interface{}{}
+		data := map[string]interface{}{}
+
+		for _, v := range r.Variables {
+			rules[v.Key] = v.Rule
+			data[v.Key] = v.Default
+		}
+
 		test := struct {
 			name  string
 			data  map[string]interface{}
 			rules map[string]interface{}
 			valid bool
 		}{
-			name: r.Name,
-			data: map[string]interface{}{
-				r.Key: r.Default,
-			},
-			rules: map[string]interface{}{
-				r.Key: r.Rule,
-			},
+			name:  r.File,
+			data:  data,
+			rules: rules,
 			valid: true,
 		}
 		tests = append(tests, test)
