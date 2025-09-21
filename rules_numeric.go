@@ -30,7 +30,7 @@ func (r *MinRule) Passes(attribute string, value interface{}) bool {
 			}
 		}
 	}
-	
+
 	// Fall back to GetSize for non-numeric values
 	size, ok := GetSize(value)
 	return ok && size >= r.Min
@@ -61,7 +61,7 @@ func (r *MaxRule) Passes(attribute string, value interface{}) bool {
 			}
 		}
 	}
-	
+
 	// Fall back to GetSize for non-numeric values
 	size, ok := GetSize(value)
 	return ok && size <= r.Max
@@ -84,7 +84,7 @@ func (r *BetweenRule) Passes(attribute string, value interface{}) bool {
 			return floatVal >= r.Min && floatVal <= r.Max
 		}
 	}
-	
+
 	// Fall back to GetSize for non-numeric values
 	size, ok := GetSize(value)
 	return ok && size >= r.Min && size <= r.Max
@@ -118,19 +118,17 @@ type DigitsRule struct {
 
 func (r *DigitsRule) Passes(attribute string, value interface{}) bool {
 	str := ToString(value)
-	
+
 	// Remove any minus sign for negative numbers
-	if strings.HasPrefix(str, "-") {
-		str = str[1:]
-	}
-	
+	strings.TrimPrefix(str, "-")
+
 	// Check if all characters are digits
 	for _, char := range str {
 		if char < '0' || char > '9' {
 			return false
 		}
 	}
-	
+
 	return len(str) == r.Length
 }
 
@@ -146,19 +144,17 @@ type DigitsBetweenRule struct {
 
 func (r *DigitsBetweenRule) Passes(attribute string, value interface{}) bool {
 	str := ToString(value)
-	
+
 	// Remove any minus sign for negative numbers
-	if strings.HasPrefix(str, "-") {
-		str = str[1:]
-	}
-	
+	strings.TrimPrefix(str, "-")
+
 	// Check if all characters are digits
 	for _, char := range str {
 		if char < '0' || char > '9' {
 			return false
 		}
 	}
-	
+
 	length := len(str)
 	return length >= r.Min && length <= r.Max
 }
@@ -174,12 +170,10 @@ type MinDigitsRule struct {
 
 func (r *MinDigitsRule) Passes(attribute string, value interface{}) bool {
 	str := ToString(value)
-	
+
 	// Remove any minus sign for negative numbers
-	if strings.HasPrefix(str, "-") {
-		str = str[1:]
-	}
-	
+	strings.TrimPrefix(str, "-")
+
 	// Count digits only
 	digitCount := 0
 	for _, char := range str {
@@ -187,7 +181,7 @@ func (r *MinDigitsRule) Passes(attribute string, value interface{}) bool {
 			digitCount++
 		}
 	}
-	
+
 	return digitCount >= r.Min
 }
 
@@ -203,12 +197,12 @@ type DecimalRule struct {
 
 func (r *DecimalRule) Passes(attribute string, value interface{}) bool {
 	str := ToString(value)
-	
+
 	// Check if it's a valid number
 	if _, err := strconv.ParseFloat(str, 64); err != nil {
 		return false
 	}
-	
+
 	// Find decimal point
 	parts := strings.Split(str, ".")
 	if len(parts) == 1 {
@@ -216,18 +210,18 @@ func (r *DecimalRule) Passes(attribute string, value interface{}) bool {
 		// For range validation, 0 decimal places should be valid if Min <= 0
 		return r.Min <= 0 && (r.Max == 0 || r.Max >= 0)
 	}
-	
+
 	if len(parts) != 2 {
 		return false // Multiple decimal points
 	}
-	
+
 	decimalPlaces := len(parts[1])
-	
+
 	if r.Max == 0 {
 		// Exact number of decimal places
 		return decimalPlaces == r.Min
 	}
-	
+
 	// Range of decimal places
 	return decimalPlaces >= r.Min && decimalPlaces <= r.Max
 }
@@ -249,11 +243,11 @@ func (r *MultipleOfRule) Passes(attribute string, value interface{}) bool {
 	if err != nil {
 		return false
 	}
-	
+
 	if r.Value == 0 {
 		return false
 	}
-	
+
 	remainder := math.Mod(val, r.Value)
 	// Use a small epsilon for floating point comparison
 	return math.Abs(remainder) < 1e-10 || math.Abs(remainder-r.Value) < 1e-10

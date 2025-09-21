@@ -134,7 +134,7 @@ func IsNil(value interface{}) bool {
 	if value == nil {
 		return true
 	}
-	
+
 	v := reflect.ValueOf(value)
 	switch v.Kind() {
 	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
@@ -149,7 +149,7 @@ func ToString(value interface{}) string {
 	if value == nil {
 		return ""
 	}
-	
+
 	switch v := value.(type) {
 	case string:
 		return v
@@ -216,7 +216,7 @@ func GetSize(value interface{}) (float64, bool) {
 	if value == nil {
 		return 0, false
 	}
-	
+
 	v := reflect.ValueOf(value)
 	switch v.Kind() {
 	case reflect.String:
@@ -230,7 +230,7 @@ func GetSize(value interface{}) (float64, bool) {
 	case reflect.Float32, reflect.Float64:
 		return v.Float(), true
 	}
-	
+
 	return 0, false
 }
 
@@ -239,7 +239,7 @@ func IsInteger(value interface{}) bool {
 	if value == nil {
 		return false
 	}
-	
+
 	switch v := value.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 		return true
@@ -260,7 +260,7 @@ func IsNumeric(value interface{}) bool {
 	if value == nil {
 		return false
 	}
-	
+
 	switch v := value.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
 		return true
@@ -277,7 +277,7 @@ func IsJSON(str string) bool {
 	if str == "" {
 		return false
 	}
-	
+
 	var js json.RawMessage
 	return json.Unmarshal([]byte(str), &js) == nil
 }
