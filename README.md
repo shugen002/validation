@@ -1,90 +1,13 @@
-# Laravel-style Validation Library for Go
+# Validation
 
-An implementation of Laravel's validation framework in Go, providing a comprehensive set of validation rules and features similar to Laravel's validator (excluding database and file validation features).
-
-> [!WARNING]  
-> This is a fully AI coded library, use at your risk.
-
-> [!NOTE]
-> We use the rule and default value from [pelican-eggs/eggs](https://github.com/pelican-eggs/eggs) as a valid test case. And it looks all passed. Feel free to Provide any extra test case using in real world.
+A Go validation library inspired by Laravel's validation rules. This library provides a flexible and extensible way to validate data structures using a variety of built-in rules.
 
 ## Features
 
-This library implements all major Laravel validation rules except database and file/image related ones:
-
-### Basic Type Validation
-- `required` - Field must be present and not empty
-- `string` - Field must be a string  
-- `integer` - Field must be an integer (supports strict mode)
-- `numeric` - Field must be numeric (supports strict mode)
-- `boolean` - Field must be boolean (supports strict mode)
-- `accepted` - Field must be accepted ("yes", "on", 1, "1", true, "true")
-- `declined` - Field must be declined ("no", "off", 0, "0", false, "false")
-- `array` - Field must be an array
-- `json` - Field must be valid JSON
-
-### String Validation
-- `email` - Valid email address
-- `alpha` - Only alphabetic characters (supports ASCII mode)
-- `alpha_num` - Only alphanumeric characters (supports ASCII mode)
-- `alpha_dash` - Only alphanumeric, dash, and underscore characters (supports ASCII mode)
-- `regex` - Matches regular expression pattern
-- `not_regex` - Does not match regular expression pattern
-- `starts_with` - Starts with specified values
-- `ends_with` - Ends with specified values
-- `doesnt_start_with` - Does not start with specified values
-- `doesnt_end_with` - Does not end with specified values
-- `uppercase` - All uppercase
-- `lowercase` - All lowercase
-- `ascii` - Only ASCII characters
-
-### Numeric Validation
-- `min` - Minimum value/length
-- `max` - Maximum value/length
-- `between` - Between two values/lengths
-- `size` - Exact size/length
-- `gt` - Greater than
-- `gte` - Greater than or equal
-- `lt` - Less than
-- `lte` - Less than or equal
-
-### Array/List Validation
-- `in` - Value is in specified list
-- `not_in` - Value is not in specified list
-
-### Field Relationship Validation
-- `same` - Same as another field
-- `different` - Different from other fields
-- `confirmed` - Has matching confirmation field
-- `accepted_if` - Must be accepted if another field equals specified value
-- `declined_if` - Must be declined if another field equals specified value
-
-### Date/Time Validation
-- `date` - Valid date
-- `date_format` - Matches specific date format
-- `after` - Date after another date/field
-- `before` - Date before another date/field
-- `after_or_equal` - Date after or equal to another date/field
-- `before_or_equal` - Date before or equal to another date/field
-- `date_equals` - Date equals another date/field
-- `timezone` - Valid timezone
-
-### Network Validation
-- `url` - Valid URL
-- `ip` - Valid IP address (IPv4 or IPv6)
-- `ipv4` - Valid IPv4 address
-- `ipv6` - Valid IPv6 address
-- `mac_address` - Valid MAC address
-
-### Other Validation
-- `uuid` - Valid UUID (supports version specification)
-- `ulid` - Valid ULID
-- `hex_color` - Valid hexadecimal color
-
-### Special Rules
-- `nullable` - Field can be null
-- `sometimes` - Conditional validation
-- `bail` - Stop validation on first failure
+- **Extensible Rule System**: Easily add custom validation rules
+- **Laravel-Inspired Rules**: Supports many rules similar to Laravel's validation
+- **Type-Safe**: Written in Go with strong typing
+- **Memory Context**: Rules can share context through memory for complex validations
 
 ## Installation
 
@@ -104,437 +27,141 @@ import (
 
 func main() {
     factory := validation.NewFactory()
-    
-    data := map[string]interface{}{
-        "name":  "John Doe",
-        "email": "john@example.com",
-        "age":   25,
+
+    // Define validation rules
+    rules := map[string]string{
+        "email":    "required|email",
+        "password": "required|min:8",
+        "age":      "numeric|min:18",
     }
-    
-    rules := map[string]interface{}{
-        "name":  "required|string|min:2",
-        "email": "required|email",
-        "age":   "integer|min:18|max:100",
+
+    // Create validator
+    validator, err := factory.Parse(rules)
+    if err != nil {
+        panic(err)
     }
-    
-    validator := factory.Make(data, rules)
-    
-    if validator.Passes() {
-        fmt.Println("Validation passed!")
-        fmt.Printf("Valid data: %+v\n", validator.Valid())
+
+    // Data to validate
+    data := map[string]string{
+        "email":    "user@example.com",
+        "password": "securepassword",
+        "age":      "25",
+    }
+
+    // Validate
+    err = validator.Validate(data)
+    if err != nil {
+        fmt.Printf("Validation failed: %v\n", err)
     } else {
-        fmt.Println("Validation failed!")
-        for field, errors := range validator.Errors().All() {
-            fmt.Printf("%s: %v\n", field, errors)
-        }
+        fmt.Println("Validation passed!")
     }
 }
 ```
 
-## Usage Examples
+## Supported Rules
 
-### Basic Validation
+### String Rules
 
-```go
-factory := validation.NewFactory()
+- `alpha` - Field must be entirely alphabetic characters
+- `alpha_dash` - Field must be alpha-numeric with dashes and underscores
+- `alpha_num` - Field must be alpha-numeric
+- `ascii` - Field must be ASCII characters
+- `confirmed` - Field must have a matching `{field}_confirmation`
+- `different:field` - Field must differ from another field
+- `email` - Field must be a valid email address
+- `ends_with:foo,bar` - Field must end with one of the values
+- `hex_color` - Field must be a valid hex color
+- `in:foo,bar` - Field must be in the given list
+- `ip` - Field must be a valid IP address
+- `ipv4` - Field must be a valid IPv4 address
+- `ipv6` - Field must be a valid IPv6 address
+- `json` - Field must be valid JSON
+- `lowercase` - Field must be lowercase
+- `mac_address` - Field must be a valid MAC address
+- `not_in:foo,bar` - Field must not be in the given list
+- `regex:pattern` - Field must match regex pattern
+- `same:field` - Field must match another field
+- `starts_with:foo,bar` - Field must start with one of the values
+- `string` - Field must be a string
+- `ulid` - Field must be a valid ULID
+- `uppercase` - Field must be uppercase
+- `url` - Field must be a valid URL
+- `uuid` - Field must be a valid UUID
 
-data := map[string]interface{}{
-    "username": "john_doe",
-    "email":    "john@example.com",
-    "age":      25,
-}
+### Number Rules
 
-rules := map[string]interface{}{
-    "username": "required|alpha_dash|min:3|max:20",
-    "email":    "required|email",
-    "age":      "required|integer|min:18",
-}
+- `numeric` - Field must be numeric
+- `integer` - Field must be an integer
+- `decimal:min,max` - Field must have specified decimal places
+- `digits:value` - Field must be exactly N digits
+- `digits_between:min,max` - Field must be between min and max digits
+- `min_digits:value` - Field must have at least N digits
+- `max_digits:value` - Field must have at most N digits
 
-validator := factory.Make(data, rules)
+### Size Rules
 
-if validator.Passes() {
-    // Validation passed
-    validData := validator.Valid()
-    fmt.Printf("Valid data: %+v\n", validData)
-} else {
-    // Validation failed
-    errors := validator.Errors()
-    fmt.Printf("Errors: %+v\n", errors.All())
-}
-```
+- `min:value` - Field must be at least value
+- `max:value` - Field must be at most value
+- `size:value` - Field must be exactly value
+- `between:min,max` - Field must be between min and max
+- `gt:field_or_value` - Field must be greater than another field or value
+- `gte:field_or_value` - Field must be greater than or equal to another field or value
+- `lt:field_or_value` - Field must be less than another field or value
+- `lte:field_or_value` - Field must be less than or equal to another field or value
 
-### Custom Error Messages
+### Boolean Rules
 
-```go
-customMessages := map[string]string{
-    "username.required": "Please provide a username",
-    "email.email":       "Please provide a valid email address",
-    "age.min":          "You must be at least 18 years old",
-}
+- `accepted` - Field must be "yes", "on", 1, "1", true, or "true"
+- `accepted_if:anotherfield,value,...` - Field must be accepted if another field equals specified value
+- `boolean` - Field must be a boolean (true/false, 1/0, "1"/"0")
+- `boolean:strict` - Field must be strictly true or false
+- `declined` - Field must be "no", "off", 0, "0", false, or "false"
+- `declined_if:anotherfield,value,...` - Field must be declined if another field equals specified value
 
-validator := factory.Make(data, rules, customMessages)
-```
+### Utility Rules
 
-### Field Relationships
-
-```go
-data := map[string]interface{}{
-    "password":              "secret123",
-    "password_confirmation": "secret123",
-}
-
-rules := map[string]interface{}{
-    "password":              "required|min:8",
-    "password_confirmation": "required|same:password",
-}
-
-validator := factory.Make(data, rules)
-```
-
-### Conditional Validation
-
-```go
-validator := factory.Make(data, basicRules)
-
-// Add conditional validation
-validator.Sometimes("phone", []validation.Rule{
-    &validation.RegexRule{Pattern: `^\d{10}$`},
-}, func(data map[string]interface{}) bool {
-    return data["contact_method"] == "phone"
-})
-```
-
-### Boolean Validation
-
-```go
-// Accepted rule - useful for terms of service, agreements, etc.
-data := map[string]interface{}{
-    "terms_of_service": "yes",
-    "privacy_policy":   true,
-    "newsletter":       1,
-}
-
-rules := map[string]interface{}{
-    "terms_of_service": "required|accepted",
-    "privacy_policy":   "required|accepted", 
-    "newsletter":       "accepted",
-}
-
-validator := factory.Make(data, rules)
-
-// Declined rule - useful for opt-outs, rejections, etc.
-data = map[string]interface{}{
-    "spam_emails":     "no",
-    "data_sharing":    false,
-    "marketing_calls": 0,
-}
-
-rules = map[string]interface{}{
-    "spam_emails":     "required|declined",
-    "data_sharing":    "declined",
-    "marketing_calls": "declined",
-}
-
-validator = factory.Make(data, rules)
-
-// Conditional acceptance based on other fields
-data = map[string]interface{}{
-    "payment_method": "credit_card",
-    "save_card":      "yes",        // Must be accepted since payment_method is credit_card
-    "auto_billing":   "no",         // Can be anything since condition not met
-}
-
-rules = map[string]interface{}{
-    "save_card":    "accepted_if:payment_method,credit_card",
-    "auto_billing": "declined_if:payment_method,cash",
-}
-
-validator = factory.Make(data, rules)
-```
-
-### Struct Validation with Tags
-
-```go
-type User struct {
-    Name     string `json:"name" validate:"required|string|min:2"`
-    Email    string `json:"email" validate:"required|email"`
-    Age      int    `json:"age" validate:"integer|min:18|max:100"`
-    Website  string `json:"website" validate:"url"`
-}
-
-user := User{
-    Name:    "Jane Doe",
-    Email:   "jane@example.com",
-    Age:     28,
-    Website: "https://janedoe.com",
-}
-
-validator, err := factory.ValidateStruct(user)
-if err != nil {
-    log.Fatal(err)
-}
-
-if validator.Passes() {
-    fmt.Println("User is valid!")
-}
-```
-
-### Stop on First Failure
-
-```go
-validator := factory.Make(data, rules).StopOnFirstFailure()
-
-if validator.Fails() {
-    // Only the first error will be present
-    firstError := validator.Errors().First("field_name")
-    fmt.Println("First error:", firstError)
-}
-```
-
-## Rule Reference
-
-### Rule Syntax
-
-Rules can be specified in several ways:
-
-```go
-// String with pipe separator
-rules := map[string]interface{}{
-    "field": "required|string|min:3|max:20",
-}
-
-// Array of strings
-rules := map[string]interface{}{
-    "field": []string{"required", "string", "min:3", "max:20"},
-}
-
-// Array of Rule objects
-rules := map[string]interface{}{
-    "field": []validation.Rule{
-        &validation.RequiredRule{},
-        &validation.StringRule{},
-        &validation.MinRule{Min: 3},
-        &validation.MaxRule{Max: 20},
-    },
-}
-```
-
-### Available Rules
-
-#### Basic Type Rules
 - `required` - Field must be present and not empty
-- `filled` - Field must have a value when present (can be absent)
-- `present` - Field must be present in input (can be empty)
-- `present_if:field,value` - Field must be present when another field equals specified value
-- `present_unless:field,value` - Field must be present unless another field equals specified value
-- `present_with:field1,field2` - Field must be present when any other fields are present
-- `present_with_all:field1,field2` - Field must be present when all other fields are present
-- `prohibited` - Field must not be present or empty
-- `prohibited_if_accepted:field` - Field must be prohibited when another field is accepted
-- `prohibited_if_declined:field` - Field must be prohibited when another field is declined
-- `prohibited_unless:field,value` - Field must be prohibited unless another field equals specified value
-- `prohibits:field1,field2` - If present, prohibits other fields from being present
-- `missing` - Field must not be present
-- `missing_if:field,value` - Field must not be present when another field equals specified value
-- `missing_unless:field,value` - Field must not be present unless another field equals specified value
-- `missing_with:field1,field2` - Field must not be present when any other fields are present
-- `missing_with_all:field1,field2` - Field must not be present when all other fields are present
-- `string` - Must be a string
-- `integer[:strict]` - Must be an integer (strict mode only accepts actual int types)
-- `numeric[:strict]` - Must be numeric (strict mode rejects string numbers)
-- `boolean[:strict]` - Must be boolean (strict mode only accepts actual bool types)
-- `accepted` - Must be accepted ("yes", "on", 1, "1", true, "true")
-- `declined` - Must be declined ("no", "off", 0, "0", false, "false")
-- `array[:key1,key2]` - Must be an array (optionally restrict allowed keys)
-- `json` - Must be valid JSON string
+- `nullable` - Field may be null
+- `sometimes` - Field may be present
 
-#### String Rules
-- `email` - Valid email address
-- `alpha[:ascii]` - Alphabetic characters only (ASCII mode for ASCII-only)
-- `alpha_num[:ascii]` - Alphanumeric characters only
-- `alpha_dash[:ascii]` - Alphanumeric, dash, and underscore only
-- `regex:pattern` - Must match regular expression
-- `not_regex:pattern` - Must not match regular expression
-- `starts_with:value1,value2` - Must start with one of the values
-- `ends_with:value1,value2` - Must end with one of the values
-- `doesnt_start_with:value1,value2` - Must not start with any of the values
-- `doesnt_end_with:value1,value2` - Must not end with any of the values
-- `uppercase` - Must be all uppercase
-- `lowercase` - Must be all lowercase
-- `ascii` - Must contain only ASCII characters
+## Custom Rules
 
-#### Numeric Rules
-- `min:value` - Minimum value/length
-- `max:value` - Maximum value/length
-- `between:min,max` - Between minimum and maximum values/lengths
-- `size:value` - Exact size/length/value
-- `gt:field` - Greater than another field
-- `gte:field` - Greater than or equal to another field
-- `lt:field` - Less than another field
-- `lte:field` - Less than or equal to another field
-- `digits:length` - Must be numeric and have exact number of digits
-- `digits_between:min,max` - Must be numeric and have digit count between min and max
-- `min_digits:value` - Must have minimum number of digits
-- `decimal:places` - Must have exactly the specified number of decimal places
-- `decimal:min,max` - Must have decimal places between min and max
-- `multiple_of:value` - Must be a multiple of the specified value
-
-#### List Rules
-- `in:value1,value2,value3` - Must be one of the specified values
-- `not_in:value1,value2,value3` - Must not be one of the specified values
-- `distinct` - Array values must be unique (loose comparison)
-- `distinct:strict` - Array values must be unique (strict comparison)
-- `distinct:ignore_case` - Array values must be unique (case-insensitive)
-
-#### Field Relationship Rules
-- `same:field` - Must be the same as another field
-- `different:field1,field2` - Must be different from specified fields
-- `confirmed[:field]` - Must have matching confirmation field (defaults to fieldname_confirmation)
-- `accepted_if:field,value` - Must be accepted if another field equals the specified value
-- `declined_if:field,value` - Must be declined if another field equals the specified value
-- `required_if:field,value` - Field is required when another field equals specified value
-- `required_unless:field,value` - Field is required unless another field equals specified value
-- `required_with:field1,field2` - Field is required when any of the other fields are present
-- `required_without:field1,field2` - Field is required when any of the other fields are not present
-- `required_with_all:field1,field2` - Field is required when all of the other fields are present
-- `required_if_accepted:field` - Field is required when another field is accepted
-- `required_if_declined:field` - Field is required when another field is declined
-- `required_array_keys:key1,key2` - Array must contain the specified keys
-
-#### Date Rules
-- `date` - Must be a valid date
-- `date_format:format1,format2` - Must match one of the specified date formats
-- `after:date_or_field` - Must be after the specified date or field value
-- `before:date_or_field` - Must be before the specified date or field value
-- `after_or_equal:date_or_field` - Must be after or equal to the specified date or field value
-- `before_or_equal:date_or_field` - Must be before or equal to the specified date or field value
-- `date_equals:date_or_field` - Must equal the specified date or field value
-- `timezone[:group[:country]]` - Must be a valid timezone
-
-#### Network Rules
-- `url[:protocol1,protocol2]` - Must be a valid URL (optionally restrict protocols)
-- `ip` - Must be a valid IP address (IPv4 or IPv6)
-- `ipv4` - Must be a valid IPv4 address
-- `ipv6` - Must be a valid IPv6 address
-- `mac_address` - Must be a valid MAC address
-
-#### Other Rules
-- `uuid[:version]` - Must be a valid UUID (optionally specify version 1-8 or "max")
-- `ulid` - Must be a valid ULID
-- `hex_color` - Must be a valid hexadecimal color
-
-#### Special Rules
-- `nullable` - Field can be null/nil
-- `sometimes` - Only validate if field is present
-- `bail` - Stop validation on first failure
-
-## Error Handling
-
-### Error Bag Methods
-
-```go
-errors := validator.Errors()
-
-// Check if field has errors
-if errors.Has("email") {
-    // Handle email errors
-}
-
-// Get all errors for a field
-emailErrors := errors.Get("email")
-
-// Get first error for a field
-firstError := errors.First("email")
-
-// Get all errors
-allErrors := errors.All()
-
-// Check if empty
-if errors.IsEmpty() {
-    // No errors
-}
-
-// Get total error count
-count := errors.Count()
-```
-
-### Validator Methods
-
-```go
-// Check if validation passed
-if validator.Passes() {
-    // Success
-}
-
-// Check if validation failed
-if validator.Fails() {
-    // Failure
-}
-
-// Get valid data only
-validData := validator.Valid()
-
-// Get invalid data only
-invalidData := validator.Invalid()
-
-// Validate and throw exception on failure
-err := validator.Validate()
-if err != nil {
-    validationErr := err.(*validation.ValidationException)
-    fmt.Printf("Validation failed: %s\n", validationErr.Message)
-    fmt.Printf("Errors: %+v\n", validationErr.Errors.All())
-}
-```
-
-## Advanced Features
-
-### Custom Validation Rules
-
-You can create custom validation rules by implementing the `Rule` interface:
-
-```go
-type CustomRule struct {
-    Parameter string
-}
-
-func (r *CustomRule) Passes(attribute string, value interface{}) bool {
-    // Your validation logic here
-    return true
-}
-
-func (r *CustomRule) Message() string {
-    return "The :attribute field is invalid."
-}
-
-// Use the custom rule
-validator.AddRule("field", &CustomRule{Parameter: "value"})
-```
-
-### Factory Configuration
+You can register custom validation rules:
 
 ```go
 factory := validation.NewFactory()
 
-// Set global custom messages
-factory.SetCustomMessages(map[string]string{
-    "required": "This field is mandatory",
-    "email":    "Please provide a valid email address",
-})
-
-// Set global custom attributes
-factory.SetCustomAttributes(map[string]string{
-    "email": "Email Address",
-    "phone": "Phone Number",
+factory.RegisterRule("custom_rule", func(cfg map[string]interface{}, args ...string) (validation.ValidationRule, error) {
+    return func(ctx *validation.ValidationContext) (bool, error) {
+        // Your validation logic here
+        if ctx.FieldValue != "expected" {
+            return false, fmt.Errorf("field %s must be 'expected'", ctx.FieldName)
+        }
+        return true, nil
+    }, nil
 })
 ```
 
-## Differences from Laravel
+## Configuration
 
-1. **No Database Rules**: `exists`, `unique` and other database-dependent rules are not implemented
-2. **No File Rules**: `file`, `image`, `mimes`, `dimensions` and other file-related rules are not implemented
-3. **Go Types**: Rules work with Go types instead of PHP types
-4. **Struct Tags**: Additional support for validating structs using struct tags
+You can set global configuration:
+
+```go
+factory.SetConfig("strict", true)
+```
+
+## Testing
+
+Run tests with:
+
+```bash
+go test ./...
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE.md).
+This project is licensed under the MIT License - see the LICENSE file for details.

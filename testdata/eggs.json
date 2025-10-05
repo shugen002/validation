@@ -73,6 +73,12 @@
         "default": "8377"
       },
       {
+        "name": "Bastion API Auth",
+        "key": "BASTION_API_AUTH",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
         "name": "Startup cmd",
         "key": "STARTUP_CMD",
         "rule": "required|string|in:npm start,npm run commands",
@@ -105,6 +111,36 @@
         "key": "DATABASE_URL",
         "rule": "required|string",
         "default": "file:/home/container/dynamica/db.sqlite"
+      },
+      {
+        "name": "Guild ID",
+        "key": "GUILD_ID",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "Sentry DSN",
+        "key": "SENTRY_DSN",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "MQTT URL",
+        "key": "MQTT_URL",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "MQTT Username",
+        "key": "MQTT_USER",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "MQTT Password",
+        "key": "MQTT_PASS",
+        "rule": "string|nullable",
+        "default": ""
       }
     ]
   },
@@ -135,10 +171,40 @@
         "default": "2"
       },
       {
+        "name": "DISCORD_BOT_TOKEN",
+        "key": "DISCORD_BOT_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "TELEGRAM_BOT_TOKEN",
+        "key": "TELEGRAM_BOT_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "STEAM_WEB_API_KEY",
+        "key": "STEAM_WEB_API_KEY",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Debug Mode",
         "key": "DBG",
         "rule": "required|in:0,1",
         "default": "0"
+      },
+      {
+        "name": "SLACK_BOT_TOKEN",
+        "key": "SLACK_BOT_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "SLACK_APP_TOKEN",
+        "key": "SLACK_APP_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -244,6 +310,18 @@
         "key": "BOT_NAME",
         "rule": "required|string|max:20",
         "default": "Ispyra"
+      },
+      {
+        "name": "Imgur API ID",
+        "key": "IMGUR_KEY",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Imgur Secret",
+        "key": "IMGUR_SECRET",
+        "rule": "nullable|string|max:20",
+        "default": ""
       }
     ]
   },
@@ -268,6 +346,30 @@
     "file": "pelican-eggs_eggs/bots/discord/ree6/egg-ree6.json",
     "variables": [
       {
+        "name": "Dagpi token",
+        "key": "DAGPI_TOKEN",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Sentry DSN",
+        "key": "SENTRY_DSN",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Spotify Client Id",
+        "key": "SPOTIFY_CLIENT_ID",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Spotify Client Secret",
+        "key": "SPOTIFY_CLIENT_SECRET",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
         "name": "Heartbeat Url",
         "key": "HEARTBEAT_URL",
         "rule": "string",
@@ -280,6 +382,54 @@
         "default": "60"
       },
       {
+        "name": "Amari Token",
+        "key": "AMARI_TOKEN",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Twitch Client Id",
+        "key": "TWITCH_CLIENT_ID",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Twitch Client Secret",
+        "key": "TWITCH_CLIENT_SECRET",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Twitter Bearer Key",
+        "key": "TWITTER_BEARER",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Reddit Client Id",
+        "key": "REDDIT_CLIENT_ID",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Reddit Client Secret",
+        "key": "REDDIT_CLIENT_SECRET",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Instagram Username",
+        "key": "INSTAGRAM_USERNAME",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Instagram Password",
+        "key": "INSTAGRAM_PASSWORD",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
         "name": "SQL Username",
         "key": "DATABASE_USER",
         "rule": "string|max:32",
@@ -290,6 +440,12 @@
         "key": "DATABASE_DB",
         "rule": "string|max:64",
         "default": "root"
+      },
+      {
+        "name": "SQL Password",
+        "key": "DATABASE_PW",
+        "rule": "nullable|string|max:128",
+        "default": ""
       },
       {
         "name": "SQL Port",
@@ -583,6 +739,24 @@
         "key": "BRANCH",
         "rule": "required|string|max:20",
         "default": "master"
+      },
+      {
+        "name": "Domain",
+        "key": "HOSTNAME",
+        "rule": "nullable|string|max:50",
+        "default": ""
+      },
+      {
+        "name": "Use HTTPS",
+        "key": "HTTPS",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Path to SSL",
+        "key": "SSLPATH",
+        "rule": "nullable|string|max:250",
+        "default": ""
       }
     ]
   },
@@ -594,6 +768,24 @@
         "key": "BRANCH",
         "rule": "required|string|max:20",
         "default": "master"
+      },
+      {
+        "name": "Domain",
+        "key": "ADDRESS",
+        "rule": "nullable|string|max:50",
+        "default": ""
+      },
+      {
+        "name": "Use HTTPS",
+        "key": "HTTPS",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Path to SSL",
+        "key": "SSLPATH",
+        "rule": "nullable|string|max:250",
+        "default": ""
       }
     ]
   },
@@ -688,6 +880,12 @@
     "file": "pelican-eggs_eggs/game_eggs/clone_hero/egg-clone-hero.json",
     "variables": [
       {
+        "name": "Server password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|regex:/^[a-zA-Z0-9_]+$/",
+        "default": ""
+      },
+      {
         "name": "Log level",
         "key": "LOG_LEVEL",
         "rule": "required|string|in:0,1,2,3,4",
@@ -711,6 +909,12 @@
         "default": "CS2D Server"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "SERVER_PLAYERS",
         "rule": "required|string",
@@ -722,10 +926,34 @@
     "file": "pelican-eggs_eggs/game_eggs/cubeengine/assaultcube/egg-assault-cube.json",
     "variables": [
       {
+        "name": "Server Auth Key",
+        "key": "ASSAULT_SERVER_KEY",
+        "rule": "nullable|required|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Server Description",
+        "key": "ASSAULT_SERVER_DESCRIPTION",
+        "rule": "nullable|string|max:512",
+        "default": ""
+      },
+      {
+        "name": "Message of the Day",
+        "key": "ASSAULT_SERVER_MOTD",
+        "rule": "nullable|string|max:512",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "ASSAULT_SERVER_MAXPLAYERS",
         "rule": "required|string|integer|max:16",
         "default": "16"
+      },
+      {
+        "name": "Player Password",
+        "key": "ASSAULT_SERVER_PLAYERPASSWORD",
+        "rule": "nullable|string|max:512",
+        "default": ""
       },
       {
         "name": "Master Server",
@@ -744,6 +972,12 @@
   {
     "file": "pelican-eggs_eggs/game_eggs/cubeengine/cube2/egg-cube2--sauerbraten.json",
     "variables": [
+      {
+        "name": "Server Description",
+        "key": "CUBE_SERVERDESCRIPTION",
+        "rule": "nullable|string|max:512",
+        "default": ""
+      },
       {
         "name": "Max Players",
         "key": "CUBE_MAXPLAYERS",
@@ -772,6 +1006,12 @@
         "key": "SERVER_NAME",
         "rule": "required|string|max:64",
         "default": "My DDNet server"
+      },
+      {
+        "name": "Server password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:64",
+        "default": ""
       },
       {
         "name": "Server map",
@@ -803,10 +1043,58 @@
         "default": "freedoom1.wad"
       },
       {
+        "name": "PWADS",
+        "key": "PWADS",
+        "rule": "nullable|string|max:255",
+        "default": ""
+      },
+      {
+        "name": "Skill",
+        "key": "SKILL",
+        "rule": "nullable|string|between:0,15",
+        "default": ""
+      },
+      {
         "name": "map",
         "key": "MAP",
         "rule": "nullable|string|max:255",
         "default": "e1m1"
+      },
+      {
+        "name": "dmflags",
+        "key": "DMFLAGS",
+        "rule": "nullable|string|max:255",
+        "default": ""
+      },
+      {
+        "name": "dmflags2",
+        "key": "DMFLAGS2",
+        "rule": "nullable|string|max:255",
+        "default": ""
+      },
+      {
+        "name": "zadmflags",
+        "key": "ZADMFLAGS",
+        "rule": "nullable|string|max:255",
+        "default": ""
+      },
+      {
+        "name": "compatflags",
+        "key": "COMPATFLAGS",
+        "rule": "nullable|string|max:255",
+        "default": ""
+      },
+      {
+        "name": "compatflags2",
+        "key": "COMPATFLAGS2",
+        "rule": "nullable|string|max:255",
+        "default": ""
+      },
+      {
+        "name": "zacompatflags",
+        "key": "ZACOMPATFLAGS",
+        "rule": "nullable|string|max:255",
+        "default": ""
       },
       {
         "name": "Enable GeoIP",
@@ -888,6 +1176,24 @@
         "key": "HOST_NAME",
         "rule": "nullable|string|max:20",
         "default": "Your Sub-Server"
+      },
+      {
+        "name": "Controller URL",
+        "key": "CONTROLLER_URL",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Controller Token",
+        "key": "CONTROLLER_TOKEN",
+        "rule": "nullable|string|max:256",
+        "default": ""
+      },
+      {
+        "name": "Plugins",
+        "key": "PLUGINS",
+        "rule": "nullable|string|max:512",
+        "default": ""
       },
       {
         "name": "Cluster Name",
@@ -1207,6 +1513,12 @@
         "default": "recommended"
       },
       {
+        "name": "Download Link",
+        "key": "DOWNLOAD_URL",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
         "name": "Steam Web Api Key",
         "key": "STEAM_WEBAPIKEY",
         "rule": "required|string",
@@ -1348,6 +1660,18 @@
         "key": "MAX_PLAYERS",
         "rule": "required|integer",
         "default": "4"
+      },
+      {
+        "name": "Server Icon URL",
+        "key": "SERV_ICON",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Server Description",
+        "key": "SERV_DESC",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Download URL",
@@ -1583,6 +1907,12 @@
         "default": "server.jar"
       },
       {
+        "name": "Download Path",
+        "key": "DL_PATH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "nukkit version",
         "key": "NUKKIT_VERSION",
         "rule": "required|string|max:20",
@@ -1609,6 +1939,12 @@
         "key": "VERSION",
         "rule": "required|string",
         "default": "latest"
+      },
+      {
+        "name": "AutoReboot mode",
+        "key": "AUTOREBOOT",
+        "rule": "nullable|string|max:2",
+        "default": ""
       }
     ]
   },
@@ -1725,6 +2061,12 @@
         "default": "server.jar"
       },
       {
+        "name": "Download Path",
+        "key": "DL_PATH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Build Number",
         "key": "BUILD_NUMBER",
         "rule": "required|string|max:20",
@@ -1752,6 +2094,41 @@
         "key": "BUILD_TYPE",
         "rule": "required|string|in:recommended,latest",
         "default": "recommended"
+      },
+      {
+        "name": "Forge Version",
+        "key": "FORGE_VERSION",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "file": "pelican-eggs_eggs/game_eggs/minecraft/java/ftb/egg-ftb-modpacksch-server.json",
+    "variables": [
+      {
+        "name": "FTB Pack search term",
+        "key": "FTB_SEARCH_TERM",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "FTB modpack ID",
+        "key": "FTB_MODPACK_ID",
+        "rule": "nullable|integer",
+        "default": ""
+      },
+      {
+        "name": "FTB Pack Version",
+        "key": "FTB_VERSION_STRING",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "FTB Pack Version ID",
+        "key": "FTB_MODPACK_VERSION_ID",
+        "rule": "nullable|integer",
+        "default": ""
       }
     ]
   },
@@ -1770,10 +2147,22 @@
     "file": "pelican-eggs_eggs/game_eggs/minecraft/java/ftb/outdated/egg-feed-the-beast.json",
     "variables": [
       {
+        "name": "Modpack URL Name",
+        "key": "MODPACK_URL",
+        "rule": "nullable|regex:([a-z-0-9]+$)",
+        "default": ""
+      },
+      {
         "name": "Modpack Version",
         "key": "MODPACK_VERSION",
         "rule": "required|string|max:20",
         "default": "latest"
+      },
+      {
+        "name": "Level Seed",
+        "key": "LEVEL_SEED",
+        "rule": "nullable|string|max:40",
+        "default": ""
       },
       {
         "name": "Max Players",
@@ -1809,6 +2198,18 @@
         "key": "VERSION",
         "rule": "required|string|max:20",
         "default": "latest"
+      },
+      {
+        "name": "GitHub User",
+        "key": "GITHUB_USER",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "GitHub OAuth Token",
+        "key": "GITHUB_OAUTH_TOKEN",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "GitHub Package",
@@ -1900,6 +2301,12 @@
         "key": "MC_VERSION",
         "rule": "required|string|max:20",
         "default": "1.19.4"
+      },
+      {
+        "name": "Build Number",
+        "key": "BUILD_VERSION",
+        "rule": "nullable|string|max:20",
+        "default": ""
       }
     ]
   },
@@ -1911,6 +2318,12 @@
         "key": "SERVER_JARFILE",
         "rule": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
         "default": "server.jar"
+      },
+      {
+        "name": "Download URL",
+        "key": "DOWNLOAD_URL",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Version",
@@ -1928,6 +2341,12 @@
         "key": "MC_VERSION",
         "rule": "required|string|max:9",
         "default": "latest"
+      },
+      {
+        "name": "NeoForge Version",
+        "key": "NEOFORGE_VERSION",
+        "rule": "nullable|regex:/^[0-9\\.\\-]+$/",
+        "default": ""
       }
     ]
   },
@@ -1945,6 +2364,12 @@
         "key": "SERVER_JARFILE",
         "rule": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
         "default": "server.jar"
+      },
+      {
+        "name": "Download Path",
+        "key": "DL_PATH",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Build Number",
@@ -2004,6 +2429,12 @@
         "default": "server.jar"
       },
       {
+        "name": "Download Path",
+        "key": "DL_PATH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Spigot Version",
         "key": "DL_VERSION",
         "rule": "required|string|between:3,10",
@@ -2025,6 +2456,12 @@
         "key": "SF_VERSION",
         "rule": "required|string",
         "default": "recommended"
+      },
+      {
+        "name": "Forge Version",
+        "key": "FORGE_VERSION",
+        "rule": "nullable|regex:/^[0-9\\.\\-]+$/",
+        "default": ""
       }
     ]
   },
@@ -2211,6 +2648,12 @@
         "default": "travertine.jar"
       },
       {
+        "name": "Download Link",
+        "key": "DL_LINK",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Travertine build number",
         "key": "BUILD_NUMBER",
         "rule": "required|string|max:20",
@@ -2232,6 +2675,12 @@
         "key": "SERVER_JARFILE",
         "rule": "required|string|max:32|regex:/^([\\w\\d._-]+)(\\.jar)$/",
         "default": "velocity.jar"
+      },
+      {
+        "name": "Download Path",
+        "key": "DL_PATH",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Build Number",
@@ -2272,6 +2721,12 @@
         "key": "SERVER_JARFILE",
         "rule": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
         "default": "waterfall.jar"
+      },
+      {
+        "name": "Download Link",
+        "key": "DL_LINK",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Waterfall build number",
@@ -2321,10 +2776,22 @@
         "default": "servers.minetest.net"
       },
       {
+        "name": "message of the day",
+        "key": "SERVER_MOTD",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "SERVER_MAX_USERS",
         "rule": "required|string|min:0|max:65535",
         "default": "15"
+      },
+      {
+        "name": "Server password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:64",
+        "default": ""
       },
       {
         "name": "World name",
@@ -2343,6 +2810,18 @@
         "key": "COMMUNITY_DOWNLOAD",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Community game name",
+        "key": "COMMUNITY_GAME_NAME",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Community game author",
+        "key": "COMMUNITY_GAME_AUTOR",
+        "rule": "nullable|string|max:64",
+        "default": ""
       },
       {
         "name": "Game PATH",
@@ -2401,6 +2880,12 @@
         "key": "NWN_VERSION",
         "rule": "required|string|max:20",
         "default": "latest"
+      },
+      {
+        "name": "Load Slot #",
+        "key": "SAVE_SLOT",
+        "rule": "nullable|numeric",
+        "default": ""
       },
       {
         "name": "Max Number Of Clients",
@@ -2475,6 +2960,18 @@
         "default": "0"
       },
       {
+        "name": "Player Password",
+        "key": "PLAYER_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "DM Password",
+        "key": "DM_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Server Name",
         "key": "SERVER_NAME",
         "rule": "required|string",
@@ -2533,6 +3030,12 @@
         "default": "false"
       },
       {
+        "name": "PASSWORD",
+        "key": "PASSWORD",
+        "rule": "nullable:string",
+        "default": ""
+      },
+      {
         "name": "GEOIP",
         "key": "GEOIP",
         "rule": "string|max:20",
@@ -2578,6 +3081,12 @@
         "key": "AUTH",
         "rule": "required|string",
         "default": "false"
+      },
+      {
+        "name": "PASSWORD",
+        "key": "PASSWORD",
+        "rule": "nullable:string",
+        "default": ""
       },
       {
         "name": "GEOIP",
@@ -2627,6 +3136,12 @@
         "default": "false"
       },
       {
+        "name": "PASSWORD",
+        "key": "PASSWORD",
+        "rule": "nullable:string",
+        "default": ""
+      },
+      {
         "name": "GEOIP",
         "key": "GEOIP",
         "rule": "string|max:20",
@@ -2666,6 +3181,12 @@
         "key": "CFX_VERSION",
         "rule": "required|string|max:50",
         "default": "latest"
+      },
+      {
+        "name": "Download Link",
+        "key": "DOWNLOAD_URL",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "Steam Web Api Key",
@@ -2819,10 +3340,28 @@
         "default": "."
       },
       {
+        "name": "Beta Branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Telnet Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string|max:30",
+        "default": ""
+      },
+      {
         "name": "Telnet Port",
         "key": "TELNET_PORT",
         "rule": "required|string|max:20",
         "default": "8081"
+      },
+      {
+        "name": "Network Protocols",
+        "key": "SERVER_DISABLED_NETWORK_PROTOCOLS",
+        "rule": "nullable|string|max:20",
+        "default": ""
       }
     ]
   },
@@ -2860,6 +3399,12 @@
         "default": "2430930"
       },
       {
+        "name": "Additional Arguments (PARAMS)",
+        "key": "ARGS_PARAMS",
+        "rule": "nullable|string|max:1024",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "required|integer|min:1|max:200",
@@ -2872,22 +3417,46 @@
         "default": "27015"
       },
       {
+        "name": "Additional Arguments (FLAGS)",
+        "key": "ARGS_FLAGS",
+        "rule": "nullable|string|max:1024",
+        "default": ""
+      },
+      {
         "name": "Server PvE",
         "key": "SERVER_PVE",
         "rule": "required|boolean",
         "default": "1"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|alpha_dash|max:128",
+        "default": ""
+      },
+      {
         "name": "RCON Port",
         "key": "RCON_PORT",
         "rule": "required|integer|min:1025|max:65535",
         "default": "37015"
+      },
+      {
+        "name": "MOD IDs",
+        "key": "MOD_IDS",
+        "rule": "nullable|string|max:512",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/ark_survival_evolved/egg-ark--survival-evolved.json",
     "variables": [
+      {
+        "name": "Server Password",
+        "key": "ARK_PASSWORD",
+        "rule": "nullable|alpha_dash|between:1,100",
+        "default": ""
+      },
       {
         "name": "Admin Password",
         "key": "ARK_ADMIN_PASSWORD",
@@ -2937,6 +3506,18 @@
         "default": "376030"
       },
       {
+        "name": "Additional Arguments",
+        "key": "ARGS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Mods",
+        "key": "MOD_ID",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "numeric",
@@ -2984,6 +3565,12 @@
         "default": "32"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Automatic Updates",
         "key": "UPDATE_SERVER",
         "rule": "boolean",
@@ -3008,6 +3595,12 @@
         "default": "modlist.html"
       },
       {
+        "name": "Additional Mods",
+        "key": "MODIFICATIONS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "[Repair] Make Mod Files Lowercase",
         "key": "MODS_LOWERCASE",
         "rule": "boolean",
@@ -3018,6 +3611,24 @@
         "key": "VALIDATE_SERVER",
         "rule": "boolean",
         "default": "0"
+      },
+      {
+        "name": "[Advanced] Server-Side Only Mods",
+        "key": "SERVERMODS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "[Advanced] Optional Client-Side Mods",
+        "key": "OPTIONALMODS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "[Advanced] Extra Flags for SteamCMD",
+        "key": "STEAMCMD_EXTRA_FLAGS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "[Advanced] Headless Clients (HC)",
@@ -3079,6 +3690,18 @@
         "default": "32"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASS",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
+        "name": "Admin Password",
+        "key": "ADMIN_PASS",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Scenario ID",
         "key": "SCENARIO_ID",
         "rule": "required|string",
@@ -3121,6 +3744,12 @@
         "default": "0"
       },
       {
+        "name": "[Repair] Validate Server Files",
+        "key": "VALIDATE",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "[Advanced] Arma Reforger Dedicated Server App ID",
         "key": "SRCDS_APPID",
         "rule": "required|integer",
@@ -3138,6 +3767,18 @@
         "default": "AC_Server"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Http port",
+        "key": "HTTP_PORT",
+        "rule": "nullable|numeric|",
+        "default": ""
+      },
+      {
         "name": "Max clients",
         "key": "MAX_CLIENTS",
         "rule": "required|numeric|between:2,25",
@@ -3149,10 +3790,28 @@
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/assetto_corsa/egg-assetto-corsa.json",
     "variables": [
       {
+        "name": "Steam Auth Code",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Server Name",
         "key": "HOSTNAME",
         "rule": "required|string|max:45",
         "default": "Pterodactyl Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string|max:40",
+        "default": ""
+      },
+      {
+        "name": "HTTP Port",
+        "key": "HTTP_PORT",
+        "rule": "nullable|int",
+        "default": ""
       },
       {
         "name": "SRCDS_APPID",
@@ -3177,6 +3836,12 @@
   {
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/astroneer/egg-astroneer-dedicated-server.json",
     "variables": [
+      {
+        "name": "Server Password",
+        "key": "SERVER_PWD",
+        "rule": "nullable|alpha_dash|between:1,100",
+        "default": ""
+      },
       {
         "name": "Automatic Updates",
         "key": "AUTO_UPDATE",
@@ -3237,6 +3902,12 @@
         "default": "Astro Colony Dedicated Server"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "SERVER_MAXPLAYERS",
         "rule": "required|between:1,10",
@@ -3265,6 +3936,12 @@
         "key": "SERVER_AUTOSAVESCOUNT",
         "rule": "required|integer",
         "default": "10"
+      },
+      {
+        "name": "Admin List",
+        "key": "SERVER_ADMINS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Should Load Latest Savegame",
@@ -3320,6 +3997,12 @@
         "default": "Astro Colony Dedicated Server"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "SERVER_MAXPLAYERS",
         "rule": "required|between:1,10",
@@ -3348,6 +4031,12 @@
         "key": "SERVER_AUTOSAVESCOUNT",
         "rule": "required|string|max:20",
         "default": "10"
+      },
+      {
+        "name": "Admin List",
+        "key": "SERVER_ADMINS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Should Load Latest Savegame",
@@ -3473,6 +4162,12 @@
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
         "default": "1"
+      },
+      {
+        "name": "Beta branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|in:,beta",
+        "default": ""
       }
     ]
   },
@@ -3667,6 +4362,12 @@
         "default": "Pterodactyl hosted Server"
       },
       {
+        "name": "Server Password",
+        "key": "SRV_PW",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "WINEDEBUG",
         "key": "WINEDEBUG",
         "rule": "required|string|",
@@ -3718,6 +4419,12 @@
         "key": "WORLD_SEED",
         "rule": "required|integer|min:0",
         "default": "0"
+      },
+      {
+        "name": "Game ID",
+        "key": "GAME_ID",
+        "rule": "nullable|string|min:28",
+        "default": ""
       },
       {
         "name": "Max Players",
@@ -3815,6 +4522,12 @@
         "default": "A Pterodactyl hosted CS2 Server"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|alpha_dash|between:1,30",
+        "default": ""
+      },
+      {
         "name": "Gamemode",
         "key": "GAME_MODE",
         "rule": "required|string",
@@ -3832,6 +4545,24 @@
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/counter_strike/counter_strike_source/egg-counter--strike--source.json",
     "variables": [
       {
+        "name": "Steam Username",
+        "key": "STEAM_USER",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Steam Password",
+        "key": "STEAM_PASS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Steam Guard Code",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "App ID",
         "key": "SRCDS_APPID",
         "rule": "required|string|max:20",
@@ -3842,6 +4573,12 @@
         "key": "SRCDS_MAP",
         "rule": "nullable|string",
         "default": "de_dust2"
+      },
+      {
+        "name": "Steam Game Login Token",
+        "key": "STEAM_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -3895,6 +4632,12 @@
         "default": "anonymous"
       },
       {
+        "name": "Steam Password",
+        "key": "STEAM_PASS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Disable Mod Downloads/Updates",
         "key": "DISABLE_MOD_UPDATES",
         "rule": "boolean",
@@ -3919,6 +4662,18 @@
         "default": "64"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Admin Password",
+        "key": "ADMIN_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Automatic Updates",
         "key": "UPDATE_SERVER",
         "rule": "boolean",
@@ -3929,6 +4684,12 @@
         "key": "MOD_FILE",
         "rule": "nullable|string",
         "default": "modlist.html"
+      },
+      {
+        "name": "Additional Mods",
+        "key": "MODIFICATIONS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Verify Signatures",
@@ -4009,6 +4770,12 @@
         "default": "0"
       },
       {
+        "name": "[Advanced] Server-Side Only Mods",
+        "key": "SERVERMODS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "[Advanced] Extra Startup Parameters",
         "key": "STARTUP_PARAMS",
         "rule": "nullable|string",
@@ -4048,6 +4815,12 @@
         "key": "SERVER_NAME",
         "rule": "required|string|max:64",
         "default": "A Pterodactyl DDNet Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Server Map",
@@ -4173,6 +4946,12 @@
         "default": "false"
       },
       {
+        "name": "Server Password",
+        "key": "SRV_PWD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "Server Description",
         "key": "SRV_DES",
         "rule": "required|string|max:50",
@@ -4197,10 +4976,28 @@
         "default": "1"
       },
       {
+        "name": "Webserver URL",
+        "key": "WEBSRVURL",
+        "rule": "nullable|url",
+        "default": ""
+      },
+      {
         "name": "Max Connections",
         "key": "MAX_CON",
         "rule": "required|string|max:20",
         "default": "-1"
+      },
+      {
+        "name": "Playtime",
+        "key": "PLAYTIME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "DetailedDescription",
+        "key": "DEDES",
+        "rule": "nullable|string|max:50",
+        "default": ""
       }
     ]
   },
@@ -4212,6 +5009,12 @@
         "key": "SRV_NAME",
         "rule": "required|string|max:20",
         "default": "My Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "SRV_PWD",
+        "rule": "nullable|string|max:20",
+        "default": ""
       },
       {
         "name": "Max Players",
@@ -4242,6 +5045,12 @@
         "key": "SRV_DESC",
         "rule": "nullable|string|max:127",
         "default": "Empyrion Galactic Survival Dedicated Server running on Pterodactyl Panel"
+      },
+      {
+        "name": "Version",
+        "key": "VERSION",
+        "rule": "nullable|string|max:20",
+        "default": ""
       },
       {
         "name": "WINEARCH",
@@ -4301,6 +5110,12 @@
         "key": "SRV_NAME",
         "rule": "required|string",
         "default": "My Server"
+      },
+      {
+        "name": "[SERVER] Server Password",
+        "key": "SRV_PW",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "[SERVER] Max Players",
@@ -4414,6 +5229,12 @@
         "default": "16"
       },
       {
+        "name": "[Repair] Validate Server Files",
+        "key": "VALIDATE",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
         "name": "[System] Ground Branch Dedicated Server App ID",
         "key": "SRCDS_APPID",
         "rule": "required|string|in:476400",
@@ -4485,6 +5306,30 @@
         "default": "0"
       },
       {
+        "name": "Steam Username",
+        "key": "STEAM_USER",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Steam Password",
+        "key": "STEAM_PASS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Steam Auth",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Beta branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|in:,steam_legacy",
+        "default": ""
+      },
+      {
         "name": "Auto update",
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
@@ -4518,6 +5363,30 @@
         "key": "VAC_PORT",
         "rule": "required|numeric|digits_between:1,5",
         "default": "26900"
+      },
+      {
+        "name": "Steam Username",
+        "key": "STEAM_USER",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
+        "name": "Steam Password",
+        "key": "STEAM_PASS",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Steam Auth",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Beta branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|in:,steam_legacy",
+        "default": ""
       },
       {
         "name": "Auto update",
@@ -4555,6 +5424,12 @@
         "default": "europe"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASS",
+        "rule": "nullable|string|max:50",
+        "default": ""
+      },
+      {
         "name": "Server Log Archive",
         "key": "SERVER_LOG_ARCHIVE_PATH",
         "rule": "required|string|max:200",
@@ -4565,6 +5440,12 @@
         "key": "SRCDS_APPID",
         "rule": "required|numeric|in:1424230",
         "default": "1424230"
+      },
+      {
+        "name": "Holdfast Build",
+        "key": "EXTRA_FLAGS",
+        "rule": "nullable|string|max:100",
+        "default": ""
       }
     ]
   },
@@ -4602,10 +5483,22 @@
         "default": "HumanitZ [Dedicated]"
       },
       {
+        "name": "Server Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Save Name",
         "key": "SAVE_NAME",
         "rule": "required|string",
         "default": "DedicatedSaveMP"
+      },
+      {
+        "name": "Admin Password",
+        "key": "ADMIN_PASS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Max Players",
@@ -4901,6 +5794,12 @@
         "default": "A Hurtworld Server"
       },
       {
+        "name": "Server Owner Guid",
+        "key": "ADMINS",
+        "rule": "nullable|string|max:17",
+        "default": ""
+      },
+      {
         "name": "Creative Mode",
         "key": "CREATIVE_MODE",
         "rule": "required|boolean",
@@ -5013,6 +5912,24 @@
         "default": "Scenario_Crossing_Checkpoint_Insurgents"
       },
       {
+        "name": "Additional Switches",
+        "key": "ADDSWITCHES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Game Stats Token",
+        "key": "GST",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "GSLT Authentication",
+        "key": "GSLTT",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Auto Update",
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
@@ -5024,10 +5941,34 @@
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/killing_floor_2/egg-killing-floor2.json",
     "variables": [
       {
+        "name": "Steam Username",
+        "key": "STEAM_USER",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Steam Password",
+        "key": "STEAM_PASS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Steam Auth",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string|max:6",
+        "default": ""
+      },
+      {
         "name": "Steam Server App ID",
         "key": "SRCDS_APPID",
         "rule": "required|string|in:232130",
         "default": "232130"
+      },
+      {
+        "name": "Extra Flags",
+        "key": "EXTRA_FLAGS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Map Name",
@@ -5147,10 +6088,22 @@
         "default": "Welcome to Pterodactyl Island!"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|alpha_num|max:20",
+        "default": ""
+      },
+      {
         "name": "Community Website",
         "key": "COMMUNITY_WEBSITE",
         "rule": "nullable|string|max:64",
         "default": "pterodactyl.io"
+      },
+      {
+        "name": "Admin EOS Account ID",
+        "key": "ADMIN_ID",
+        "rule": "nullable|regex:/^([a-z0-9]{32} ?)*$/",
+        "default": ""
       },
       {
         "name": "Enable PVP",
@@ -5265,6 +6218,12 @@
         "default": "A Pterodactyl Hosted Server"
       },
       {
+        "name": "Game Password",
+        "key": "GAME_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Default Map",
         "key": "DEFAULT_MAP",
         "rule": "nullable|string",
@@ -5281,6 +6240,12 @@
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Extra variables for install",
+        "key": "EXTRA_FLAGS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "WINDOWS_INSTALL",
@@ -5312,10 +6277,22 @@
         "default": "27015"
       },
       {
+        "name": "Admin Password",
+        "key": "ADMIN_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "Server Name",
         "key": "SERVER_NAME",
         "rule": "required|string|max:40",
         "default": "Pterodactyl Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "GAME_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
       },
       {
         "name": "DEFAULT_MAP",
@@ -5454,6 +6431,18 @@
         "default": "13888"
       },
       {
+        "name": "Admin ID's",
+        "key": "ADMIN_IDS",
+        "rule": "nullable|string|max:128",
+        "default": ""
+      },
+      {
+        "name": "Extra Flags",
+        "key": "EXTRA_FLAGS",
+        "rule": "nullable|string|",
+        "default": ""
+      },
+      {
         "name": "Cluster ID",
         "key": "CLUSTER_ID",
         "rule": "required|numeric",
@@ -5483,6 +6472,12 @@
         "default": "10"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Steam App ID",
         "key": "SRCDS_APPID",
         "rule": "required|string|in:1169370",
@@ -5493,12 +6488,24 @@
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Steam Beta Branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|max:64",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/neosvr/egg-neos-v-r.json",
     "variables": [
+      {
+        "name": "Steam Account Token/Code",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "Enable Mod Loader",
         "key": "ENABLE_MODLOADER",
@@ -5694,6 +6701,12 @@
         "default": "False"
       },
       {
+        "name": "Server password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Server players",
         "key": "SERVER_PLAYERS",
         "rule": "required|numeric|between:1,100",
@@ -5846,6 +6859,18 @@
         "default": "A Pterodactyl hosted Palworld Server"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|alpha_dash|between:1,30",
+        "default": ""
+      },
+      {
+        "name": "Public IP",
+        "key": "PUBLIC_IP",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "RCON Port",
         "key": "RCON_PORT",
         "rule": "required|numeric",
@@ -5862,6 +6887,12 @@
         "key": "ENABLE_ENEMY",
         "rule": "required|string|in:True,False",
         "default": "True"
+      },
+      {
+        "name": "Server Description",
+        "key": "SERVER_DESCRIPTION",
+        "rule": "nullable|string|max:128",
+        "default": ""
       },
       {
         "name": "WINDOWS_INSTALL",
@@ -5893,10 +6924,22 @@
         "default": "32"
       },
       {
+        "name": "Public IP",
+        "key": "PUBLIC_IP",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Server Name",
         "key": "SERVER_NAME",
         "rule": "required|string|max:64",
         "default": "A Pterodactyl hosted Palworld Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|alpha_dash|between:1,30",
+        "default": ""
       },
       {
         "name": "RCON Port",
@@ -5915,6 +6958,12 @@
         "key": "ENABLE_ENEMY",
         "rule": "required|string|in:True,False",
         "default": "True"
+      },
+      {
+        "name": "Server Description",
+        "key": "SERVER_DESCRIPTION",
+        "rule": "nullable|string|max:128",
+        "default": ""
       }
     ]
   },
@@ -5944,12 +6993,30 @@
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
         "default": "1"
+      },
+      {
+        "name": "Beta id",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|in:,beta_server",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/pixark/egg-pix-a-r-k.json",
     "variables": [
+      {
+        "name": "Server Password",
+        "key": "ARK_PASSWORD",
+        "rule": "nullable|alpha_dash|between:1,100",
+        "default": ""
+      },
+      {
+        "name": "Admin Password",
+        "key": "ARK_ADMIN_PASSWORD",
+        "rule": "nullable|alpha_dash|between:1,100",
+        "default": ""
+      },
       {
         "name": "Maximum Players",
         "key": "MAX_PLAYERS",
@@ -6052,6 +7119,18 @@
         "default": "admin_password_please_change"
       },
       {
+        "name": "User password",
+        "key": "USER_PASS",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Guest password",
+        "key": "GUEST_PASS",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
         "name": "Game mode",
         "key": "GAMEMODE",
         "rule": "required|string|in:Adventure,Creative",
@@ -6079,6 +7158,12 @@
         "key": "RCON_PORT",
         "rule": "required|numeric",
         "default": "21114"
+      },
+      {
+        "name": "RCON Password",
+        "key": "RCON_PASSWORD",
+        "rule": "nullable|regex:/^[a-zA-Z0-9]*$/",
+        "default": ""
       },
       {
         "name": "Auto Update",
@@ -6182,6 +7267,12 @@
         "default": "380870"
       },
       {
+        "name": "Steam Beta Branch [requires reinstall]",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
         "name": "Steam Auto Update",
         "key": "AUTO_UPDATE",
         "rule": "required|string|max:20",
@@ -6211,6 +7302,12 @@
         "default": "2"
       },
       {
+        "name": "Server Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "FPS",
         "key": "FPS",
         "rule": "required|numeric",
@@ -6233,6 +7330,12 @@
   {
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/resonite/egg-resonite.json",
     "variables": [
+      {
+        "name": "Steam Account Token/Code",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "Enable Mod Loader",
         "key": "ENABLE_MODLOADER",
@@ -6293,6 +7396,12 @@
         "default": "./linux64"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "SRCDS_APPID",
         "key": "SRCDS_APPID",
         "rule": "required|string|max:20",
@@ -6332,6 +7441,12 @@
         "key": "SRV_NAME",
         "rule": "required|string|max:40",
         "default": "Pterodactyl hosted Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "SRV_PW",
+        "rule": "nullable",
+        "default": ""
       },
       {
         "name": "Game Mode",
@@ -6374,6 +7489,12 @@
   {
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/risk_of_rain_2/egg-risk-of-rain2.json",
     "variables": [
+      {
+        "name": "Server Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string|max:40",
+        "default": ""
+      },
       {
         "name": "Server Hostname",
         "key": "HOSTNAME",
@@ -6506,6 +7627,12 @@
         "default": "0"
       },
       {
+        "name": "Server Image",
+        "key": "SERVER_IMG",
+        "rule": "nullable|url",
+        "default": ""
+      },
+      {
         "name": "RCON Port",
         "key": "RCON_PORT",
         "rule": "required|integer",
@@ -6522,6 +7649,12 @@
         "key": "SAVEINTERVAL",
         "rule": "required|integer",
         "default": "60"
+      },
+      {
+        "name": "Additional Arguments",
+        "key": "ADDITIONAL_ARGS",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Regen Server",
@@ -6546,6 +7679,12 @@
         "key": "APP_PORT",
         "rule": "required|integer",
         "default": "28082"
+      },
+      {
+        "name": "Custom Map URL",
+        "key": "MAP_URL",
+        "rule": "nullable|url",
+        "default": ""
       },
       {
         "name": "Modding Framework",
@@ -6589,10 +7728,22 @@
         "default": "3000"
       },
       {
+        "name": "World Seed",
+        "key": "WORLD_SEED",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "required|integer",
         "default": "50"
+      },
+      {
+        "name": "Server Image",
+        "key": "SERVER_IMG",
+        "rule": "nullable|url",
+        "default": ""
       },
       {
         "name": "RCON Port",
@@ -6625,6 +7776,12 @@
         "default": "28082"
       },
       {
+        "name": "Server Logo",
+        "key": "SERVER_LOGO",
+        "rule": "nullable|url",
+        "default": ""
+      },
+      {
         "name": "SRCDS_APPID",
         "key": "SRCDS_APPID",
         "rule": "required|string|max:20",
@@ -6652,6 +7809,12 @@
         "key": "AUTO_UPDATE",
         "rule": "boolean",
         "default": "1"
+      },
+      {
+        "name": "[Repair] Validate Server Files",
+        "key": "VALIDATE",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "Autosave Interval",
@@ -6702,6 +7865,12 @@
         "default": "3"
       },
       {
+        "name": "[Advanced] Branch Name",
+        "key": "SRCDS_BETAID",
+        "rule": "string|nullable|in:public,experimental",
+        "default": ""
+      },
+      {
         "name": "[Advanced] Satisfactory Dedicated Server App ID",
         "key": "SRCDS_APPID",
         "rule": "required|integer|min:1",
@@ -6723,6 +7892,18 @@
         "key": "DOTNET_BUNDLE_EXTRACT_BASE_DIR",
         "rule": "required|string",
         "default": "./dotnet-bundle"
+      },
+      {
+        "name": "Branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|max:30",
+        "default": ""
+      },
+      {
+        "name": "Branch password",
+        "key": "SRCDS_BETAPASS",
+        "rule": "nullable|string|max:40",
+        "default": ""
       },
       {
         "name": "Auto Update",
@@ -6775,6 +7956,12 @@
         "key": "WORLDNAME",
         "rule": "required|string|max:32",
         "default": "World"
+      },
+      {
+        "name": "Server Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string|min:3",
+        "default": ""
       },
       {
         "name": "Is Private Game",
@@ -7274,10 +8461,22 @@
     "file": "pelican-eggs_eggs/game_eggs/steamcmd_servers/starbound/egg-starbound.json",
     "variables": [
       {
+        "name": "Steam Password",
+        "key": "STEAM_PASS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Game ID",
         "key": "SRCDS_APPID",
         "rule": "string",
         "default": "211820"
+      },
+      {
+        "name": "Steam Auth",
+        "key": "STEAM_AUTH",
+        "rule": "nullable|string|max:5",
+        "default": ""
       },
       {
         "name": "Auto Update Server",
@@ -7306,13 +8505,19 @@
         "name": "World Name",
         "key": "WORLD_NAME",
         "rule": "nullable|string|in:,Moon,Mars,Europa,Europa2,Mimas,Vulcan,Vulcan2,Space,Loulan,Venus",
-        "default": "Moon"
+        "default": "moon"
       },
       {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "required|integer|between:1,30",
         "default": "10"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASSWD",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "Save Name",
@@ -7355,6 +8560,12 @@
         "key": "UPDATE_PORT",
         "rule": "required|string|max:50",
         "default": "27014"
+      },
+      {
+        "name": "Beta Branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -7371,13 +8582,19 @@
         "name": "World Name",
         "key": "WORLD_NAME",
         "rule": "nullable|string|in:,Moon,Mars,Europa,Europa2,Mimas,Vulcan,Vulcan2,Space,Loulan,Venus",
-        "default": "Moon"
+        "default": "moon"
       },
       {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "required|integer|between:1,30",
         "default": "10"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASSWD",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "Save Name",
@@ -7420,6 +8637,12 @@
         "key": "UPDATE_PORT",
         "rule": "required|string|max:50",
         "default": "27014"
+      },
+      {
+        "name": "Beta Branch",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -7456,6 +8679,12 @@
         "default": "264710"
       },
       {
+        "name": "Steam-GuardCode",
+        "key": "STEAM_GUARDCODE",
+        "rule": "nullable|string|max:6",
+        "default": ""
+      },
+      {
         "name": "Nitrox Version",
         "key": "NITROX_VERSION",
         "rule": "required|string|between:3,12",
@@ -7478,6 +8707,12 @@
         "key": "SAVE_NAME",
         "rule": "alpha_dash|between:1,100",
         "default": "world"
+      },
+      {
+        "name": "Server Password",
+        "key": "SUBNAUTICA_PASSWORD",
+        "rule": "nullable|string|between:3,12",
+        "default": ""
       },
       {
         "name": "Admin Password",
@@ -7531,6 +8766,12 @@
         "key": "SC_NAME",
         "rule": "required|string|max:40",
         "default": "Sven Co-op server"
+      },
+      {
+        "name": "Password",
+        "key": "SC_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
       },
       {
         "name": "Region",
@@ -7590,6 +8831,18 @@
         "key": "QUERY_PORT",
         "rule": "required|string|",
         "default": "27015"
+      },
+      {
+        "name": "Server name",
+        "key": "SNM_NAME",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
+      {
+        "name": "Server password",
+        "key": "SNM_PASSWORD",
+        "rule": "nullable|string|max:32",
+        "default": ""
       },
       {
         "name": "Max players",
@@ -7656,6 +8909,12 @@
         "default": "2533070"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|alpha_dash|max:128",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "required|numeric|min:1|max:6",
@@ -7697,6 +8956,12 @@
         "default": "new"
       },
       {
+        "name": "[SERVER] Server Password",
+        "key": "SRV_PW",
+        "rule": "nullable",
+        "default": ""
+      },
+      {
         "name": "[SERVER] PvE",
         "key": "GAMEMODE",
         "rule": "required|boolean",
@@ -7721,6 +8986,12 @@
         "default": "true"
       },
       {
+        "name": "[SERVER] Server Admins",
+        "key": "SRV_ADMIN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "[ADVANCED] Label admin",
         "key": "ADMIN_LABEL",
         "rule": "required|string|in:true,false",
@@ -7737,6 +9008,12 @@
         "key": "GREENHAND",
         "rule": "required|string|in:true,false",
         "default": "true"
+      },
+      {
+        "name": "[ADVANCED] Server Tags",
+        "key": "SRV_TAGS",
+        "rule": "nullable",
+        "default": ""
       },
       {
         "name": "[ADVANCED] Enable anticheat?",
@@ -7826,6 +9103,18 @@
         "key": "SERVER_DIFFICULTY",
         "rule": "required|string|in:Peaceful,Normal,Hard",
         "default": "Normal"
+      },
+      {
+        "name": "Steam Account Token",
+        "key": "STEAM_ACC",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASS",
+        "rule": "nullable|string|max:20",
+        "default": ""
       },
       {
         "name": "Admin Password",
@@ -8017,6 +9306,12 @@
         "default": "27016"
       },
       {
+        "name": "Steam Auth token",
+        "key": "STEAM_TOKEN",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Lobby name",
         "key": "LOBBY_NAME",
         "rule": "required|string|max:64",
@@ -8046,6 +9341,12 @@
         "default": "27016"
       },
       {
+        "name": "Steam Auth token",
+        "key": "STEAM_TOKEN",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "Lobby name",
         "key": "LOBBY_NAME",
         "rule": "required|string|max:64",
@@ -8061,6 +9362,12 @@
         "key": "SRV_NAME",
         "rule": "string|max:50",
         "default": "Pterodactyl hosted Server"
+      },
+      {
+        "name": "Server Password",
+        "key": "SRV_PW",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Server ID",
@@ -8174,6 +9481,12 @@
         "key": "STOP",
         "rule": "required|string|max:20",
         "default": "kill -2 $!; wait;"
+      },
+      {
+        "name": "ModPack",
+        "key": "V_MODPACK",
+        "rule": "string|nullable",
+        "default": ""
       }
     ]
   },
@@ -8436,6 +9749,12 @@
         "default": "1"
       },
       {
+        "name": "Game Settings Preset",
+        "key": "GAME_SETTINGS_PRESET",
+        "rule": "nullable|string|in:,DuoPvP,HardcorePvP,Level30PvE,Level30PvP,Level50PvE,Level50PvP,Level70PvE,Level70PvP,SoloPvP,StandardPvE_Easy,StandardPvE_Hard,StandardPvE,StandardPvP_Easy,StandardPvP_Hard,StandardPVP",
+        "default": ""
+      },
+      {
         "name": "Server Name",
         "key": "SERVER_NAME",
         "rule": "required|string",
@@ -8460,6 +9779,12 @@
         "default": "4"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Save Name",
         "key": "SAVE_NAME",
         "rule": "required|string",
@@ -8482,6 +9807,12 @@
         "key": "SERVER_LIST",
         "rule": "required|string|in:true,false",
         "default": "true"
+      },
+      {
+        "name": "[Repair] Validate Server Files",
+        "key": "VALIDATE",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "[Advanced] Server FPS",
@@ -8585,6 +9916,12 @@
         "default": "1"
       },
       {
+        "name": "Game Settings Preset",
+        "key": "GAME_SETTINGS_PRESET",
+        "rule": "nullable|string|in:,DuoPvP,HardcorePvP,Level30PvE,Level30PvP,Level50PvE,Level50PvP,Level70PvE,Level70PvP,SoloPvP,StandardPvE_Easy,StandardPvE_Hard,StandardPvE,StandardPvP_Easy,StandardPvP_Hard,StandardPVP",
+        "default": ""
+      },
+      {
         "name": "Server Name",
         "key": "SERVER_NAME",
         "rule": "required|string",
@@ -8607,6 +9944,12 @@
         "key": "MAX_ADMINS",
         "rule": "required|integer|min:0",
         "default": "4"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Save Name",
@@ -8637,6 +9980,12 @@
         "key": "LIST_EOS",
         "rule": "required|string|in:true,false",
         "default": "true"
+      },
+      {
+        "name": "[Repair] Validate Server Files",
+        "key": "VALIDATE",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "[Advanced] Server FPS",
@@ -8740,6 +10089,12 @@
         "default": "1"
       },
       {
+        "name": "Admin Passwod",
+        "key": "ADMINPWD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "Max Players",
         "key": "MAX_PLAYERS",
         "rule": "required|int",
@@ -8750,6 +10105,12 @@
         "key": "PVP",
         "rule": "required|string|in:true,false",
         "default": "true"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVERPWD",
+        "rule": "nullable|string|max:64",
+        "default": ""
       },
       {
         "name": "Epic",
@@ -8768,6 +10129,12 @@
         "key": "SERVER_WORLD",
         "rule": "required|string|max:128",
         "default": "dist/Adventure"
+      },
+      {
+        "name": "Beta",
+        "key": "SRCDS_BETAID",
+        "rule": "nullable|string|in:,beta",
+        "default": ""
       }
     ]
   },
@@ -8851,10 +10218,28 @@
         "default": "latest"
       },
       {
+        "name": "GitHub User",
+        "key": "GITHUB_USER",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "GitHub OAuth Token",
+        "key": "GITHUB_OAUTH_TOKEN",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
         "name": "Difficulty",
         "key": "DIFFICULTY",
         "rule": "required|string|in:0,1,2,3",
         "default": "0"
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
       },
       {
         "name": "MOTD",
@@ -8968,6 +10353,18 @@
         "default": "Welcome!"
       },
       {
+        "name": "World Seed",
+        "key": "WORLD_SEED",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Password",
+        "key": "PASSWORD",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "NPCStream",
         "key": "NPCSTREAM",
         "rule": "required|int|between:0,60",
@@ -9009,6 +10406,12 @@
         "default": "16"
       },
       {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
         "name": "Advertise Server",
         "key": "SERVER_ADVERTISE",
         "rule": "required|string|in:true,false",
@@ -9021,10 +10424,46 @@
         "default": "false"
       },
       {
+        "name": "Server Name",
+        "key": "SERVER_NAME",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "Server Description",
+        "key": "SERVER_DESCRIPTION",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
         "name": "Server Player Name",
         "key": "SERVER_PLAYER_NAME",
         "rule": "string|nullable",
         "default": "Server"
+      },
+      {
+        "name": "Server Greeting",
+        "key": "SERVER_GREETING",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "Provider Name",
+        "key": "PROVIDER_NAME",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "Server Provider E-Mail",
+        "key": "PROVIDER_EMAIL",
+        "rule": "string|nullable",
+        "default": ""
+      },
+      {
+        "name": "Server Provider Website",
+        "key": "PROVIDER_WEBSITE",
+        "rule": "string|nullable",
+        "default": ""
       },
       {
         "name": "Log Chat",
@@ -9115,6 +10554,18 @@
         "default": "16"
       },
       {
+        "name": "RCON Password",
+        "key": "RCON_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Server Password",
+        "key": "SERVER_PASSWORD",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
         "name": "Map",
         "key": "SERVER_MAP",
         "rule": "required|string|max:50",
@@ -9173,6 +10624,12 @@
     "file": "pelican-eggs_eggs/game_eggs/vintage_story/egg-vintage-story.json",
     "variables": [
       {
+        "name": "Start options",
+        "key": "OPTIONS",
+        "rule": "nullable|string|max:200",
+        "default": ""
+      },
+      {
         "name": "Release branch",
         "key": "FILES_BRANCH",
         "rule": "required|string|in:stable,unstable,pre",
@@ -9212,6 +10669,12 @@
         "key": "SERVER_EXECUTABLE",
         "rule": "required|string",
         "default": "BeamMP-Server.exe"
+      },
+      {
+        "name": "sub directory to install into",
+        "key": "INSTALL_DIR",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -9236,6 +10699,12 @@
     "file": "pelican-eggs_eggs/generic/bun/egg-bun.json",
     "variables": [
       {
+        "name": "Git Repository Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
         "rule": "required|boolean",
@@ -9252,12 +10721,54 @@
         "key": "MAIN_FILE",
         "rule": "required|string",
         "default": "index.js"
+      },
+      {
+        "name": "Additional Bun Packages",
+        "key": "BUN_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Uninstall Bun Packages",
+        "key": "RMBUN_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/generic/c#/egg-generic-c.json",
     "variables": [
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Install Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
@@ -9271,6 +10782,24 @@
         "default": "0"
       },
       {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "project file",
+        "key": "PROJECT_FILE",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Project location",
         "key": "PROJECT_DIR",
         "rule": "required|string|",
@@ -9281,6 +10810,18 @@
   {
     "file": "pelican-eggs_eggs/generic/dart/egg-dart-generic.json",
     "variables": [
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Install Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
@@ -9298,6 +10839,18 @@
         "key": "AUTO_RESET",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -9305,10 +10858,34 @@
     "file": "pelican-eggs_eggs/generic/deno/egg-deno-generic.json",
     "variables": [
       {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Git Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
       },
       {
         "name": "Bot js file",
@@ -9322,6 +10899,18 @@
     "file": "pelican-eggs_eggs/generic/elixir/egg-elixir.json",
     "variables": [
       {
+        "name": "Git Repository Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Branch",
+        "key": "GIT_BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
         "rule": "required|boolean",
@@ -9332,6 +10921,18 @@
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Git Username",
+        "key": "GIT_USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "GIT_ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -9350,22 +10951,64 @@
     "file": "pelican-eggs_eggs/generic/lua/luvit/egg-luvit-generic.json",
     "variables": [
       {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
         "rule": "required|boolean",
         "default": "0"
       },
       {
+        "name": "Git Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "lua file",
         "key": "LUA_FILE",
         "rule": "required|string",
         "default": "app.lua"
+      },
+      {
+        "name": "Lit Packages",
+        "key": "LIT_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/generic/nodejs/egg-node-js-generic.json",
     "variables": [
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Install Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
@@ -9379,16 +11022,58 @@
         "default": "0"
       },
       {
+        "name": "Additional Node packages",
+        "key": "NODE_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Uninstall Node packages",
+        "key": "UNNODE_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Main file",
         "key": "MAIN_FILE",
         "rule": "required|string|max:16",
         "default": "index.js"
+      },
+      {
+        "name": "Additional Arguments.",
+        "key": "NODE_ARGS",
+        "rule": "nullable|string|max:64",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/generic/nodemon/egg-nodemon.json",
     "variables": [
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Install Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
@@ -9406,12 +11091,48 @@
         "key": "BOT_JS_FILE",
         "rule": "required|string",
         "default": "index.js"
+      },
+      {
+        "name": "Additional Node packages",
+        "key": "NODE_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Uninstall Node packages",
+        "key": "UNNODE_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/generic/python/egg-python-generic.json",
     "variables": [
+      {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
       {
         "name": "User Uploaded Files",
         "key": "USER_UPLOAD",
@@ -9431,6 +11152,24 @@
         "default": "app.py"
       },
       {
+        "name": "Additional Python packages",
+        "key": "PY_PACKAGES",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Requirements file",
         "key": "REQUIREMENTS_FILE",
         "rule": "required|string",
@@ -9442,10 +11181,34 @@
     "file": "pelican-eggs_eggs/generic/rust/egg-rust-generic.json",
     "variables": [
       {
+        "name": "Git Repo Address",
+        "key": "GIT_ADDRESS",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Branch",
+        "key": "BRANCH",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
         "name": "Auto Update",
         "key": "AUTO_UPDATE",
         "rule": "required|boolean",
         "default": "0"
+      },
+      {
+        "name": "Git Username",
+        "key": "USERNAME",
+        "rule": "nullable|string",
+        "default": ""
+      },
+      {
+        "name": "Git Access Token",
+        "key": "ACCESS_TOKEN",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
@@ -9538,6 +11301,12 @@
         "default": "0"
       },
       {
+        "name": "FaH Passkey",
+        "key": "FAH_PASSKEY",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
+      {
         "name": "FaH Anonymous Mode",
         "key": "FAH_ANON",
         "rule": "required|string|in:true,false",
@@ -9617,12 +11386,35 @@
         "key": "GRAFANA_VERSION",
         "rule": "required|string|max:20",
         "default": "latest"
+      },
+      {
+        "name": "Grafana Plugins",
+        "key": "grafana_plugins",
+        "rule": "nullable|string",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "file": "pelican-eggs_eggs/software/languagetool/egg-languagetool.json",
+    "variables": [
+      {
+        "name": "Include traindata",
+        "key": "TRAIN_MODELS",
+        "rule": "nullable|string",
+        "default": ""
       }
     ]
   },
   {
     "file": "pelican-eggs_eggs/software/meilisearch/egg-meilisearch.json",
     "variables": [
+      {
+        "name": "Master key",
+        "key": "MEILI_MASTER_KEY",
+        "rule": "nullable|string|max:64",
+        "default": ""
+      },
       {
         "name": "Environment",
         "key": "MEILI_ENV",
@@ -9693,6 +11485,18 @@
         "key": "MATCH",
         "rule": "required|string|max:20",
         "default": "linux-64bit"
+      },
+      {
+        "name": "Github User",
+        "key": "GITHUB_USER",
+        "rule": "nullable|string|max:20",
+        "default": ""
+      },
+      {
+        "name": "Github Oauth Token",
+        "key": "GITHUB_OAUTH_TOKEN",
+        "rule": "nullable|string|max:128",
+        "default": ""
       }
     ]
   },
@@ -9800,6 +11604,12 @@
   {
     "file": "pelican-eggs_eggs/voice_servers/teamspeak_ARM64/egg-teamspeak3-arm64-server.json",
     "variables": [
+      {
+        "name": "Server Query Admin Password",
+        "key": "SERVERADMIN_PASSWORD",
+        "rule": "nullable|string|max:32",
+        "default": ""
+      },
       {
         "name": "Server Version",
         "key": "TS_VERSION",
