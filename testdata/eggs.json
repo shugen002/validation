@@ -8505,7 +8505,7 @@
         "name": "World Name",
         "key": "WORLD_NAME",
         "rule": "nullable|string|in:,Moon,Mars,Europa,Europa2,Mimas,Vulcan,Vulcan2,Space,Loulan,Venus",
-        "default": "moon"
+        "default": "Moon"
       },
       {
         "name": "Max Players",
@@ -8582,7 +8582,7 @@
         "name": "World Name",
         "key": "WORLD_NAME",
         "rule": "nullable|string|in:,Moon,Mars,Europa,Europa2,Mimas,Vulcan,Vulcan2,Space,Loulan,Venus",
-        "default": "moon"
+        "default": "Moon"
       },
       {
         "name": "Max Players",

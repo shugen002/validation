@@ -279,8 +279,26 @@ func constructRegex(_cfg map[string]interface{}, args ...string) (ValidationRule
 		return nil, fmt.Errorf("regex rule requires 1 argument")
 	}
 	pattern := strings.Join(args, ",")
-	if len(pattern) >= 2 && pattern[0] == '/' && pattern[len(pattern)-1] == '/' {
-		pattern = pattern[1 : len(pattern)-1]
+
+	if len(pattern) >= 2 && pattern[0] == '/' {
+		flags := ""
+		// Find the last '/' to get the pattern without delimiters
+		lastSlash := strings.LastIndex(pattern[1:], "/") + 1
+		if lastSlash > 0 {
+			pattern = pattern[1:lastSlash]
+		}
+		if len(pattern) > lastSlash+1 {
+			flags = pattern[lastSlash+1:]
+		}
+		if strings.Contains(flags, "i") {
+			pattern = "(?i)" + pattern
+		}
+		if strings.Contains(flags, "m") {
+			pattern = "(?m)" + pattern
+		}
+		if strings.Contains(flags, "s") {
+			pattern = "(?s)" + pattern
+		}
 	}
 
 	re, err := regexp.Compile(pattern)
