@@ -44,12 +44,12 @@ func (v *Validator) Validate(value map[string]string) error {
 				if val, exists := value[f]; exists {
 					return val, nil
 				}
-				return "", fmt.Errorf("field %s not found", f)
+				return "", newErrValidationFailed(fmt.Sprintf("field %s not found", f))
 			},
 			GetValue: func(f string) (float64, error) {
 				valueStr, exists := value[f]
 				if !exists {
-					return 0, fmt.Errorf("field %s not found", f)
+					return 0, newErrValidationFailed(fmt.Sprintf("field %s not found", f))
 				}
 				valueHasNumericRule := false
 				if r, ok := v.rules[f]; ok {

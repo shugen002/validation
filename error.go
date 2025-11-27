@@ -15,5 +15,27 @@ type ErrParsingRules struct {
 }
 
 func (e *ErrParsingRules) Error() string {
-	return fmt.Sprintf("error parsing validation rules: %s", e.Reason)
+	return e.Reason
+}
+
+type ErrValidationFailed struct {
+	Reason string
+}
+
+func (e *ErrValidationFailed) Error() string {
+	return e.Reason
+}
+
+func newErrValidationFailed(reason string) error {
+	return &ErrValidationFailed{Reason: reason}
+}
+
+func IsErrValidationFailed(err error) bool {
+	_, ok := err.(*ErrValidationFailed)
+	return ok
+}
+
+func IsErrParsingRules(err error) bool {
+	_, ok := err.(*ErrParsingRules)
+	return ok
 }

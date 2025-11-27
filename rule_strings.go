@@ -21,11 +21,11 @@ func constructAlphaRule(_cfg map[string]interface{}, args ...string) (Validation
 		for _, r := range ctx.FieldValue {
 			if ascii {
 				if r > 127 || !unicode.IsLetter(r) {
-					return false, fmt.Errorf("the %s field must be entirely alphabetic characters (ASCII)", ctx.FieldName)
+					return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely alphabetic characters (ASCII)", ctx.FieldName))
 				}
 			} else {
 				if !unicode.IsLetter(r) && !unicode.IsMark(r) {
-					return false, fmt.Errorf("the %s field must be entirely alphabetic characters", ctx.FieldName)
+					return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely alphabetic characters", ctx.FieldName))
 				}
 			}
 		}
@@ -44,11 +44,11 @@ func constructAlphaDashRule(_cfg map[string]interface{}, args ...string) (Valida
 		for _, r := range ctx.FieldValue {
 			if ascii {
 				if r > 127 || (!unicode.IsLetter(r) && !unicode.IsNumber(r) && r != '-' && r != '_') {
-					return false, fmt.Errorf("the %s field must be entirely alpha-numeric characters, dashes, or underscores (ASCII)", ctx.FieldName)
+					return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely alpha-numeric characters, dashes, or underscores (ASCII)", ctx.FieldName))
 				}
 			} else {
 				if !unicode.IsLetter(r) && !unicode.IsMark(r) && !unicode.IsNumber(r) && r != '-' && r != '_' {
-					return false, fmt.Errorf("the %s field must be entirely alpha-numeric characters, dashes, or underscores", ctx.FieldName)
+					return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely alpha-numeric characters, dashes, or underscores", ctx.FieldName))
 				}
 			}
 		}
@@ -67,11 +67,11 @@ func constructAlphaNumRule(_cfg map[string]interface{}, args ...string) (Validat
 		for _, r := range ctx.FieldValue {
 			if ascii {
 				if r > 127 || (!unicode.IsLetter(r) && !unicode.IsNumber(r)) {
-					return false, fmt.Errorf("the %s field must be entirely alpha-numeric characters (ASCII)", ctx.FieldName)
+					return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely alpha-numeric characters (ASCII)", ctx.FieldName))
 				}
 			} else {
 				if !unicode.IsLetter(r) && !unicode.IsMark(r) && !unicode.IsNumber(r) {
-					return false, fmt.Errorf("the %s field must be entirely alpha-numeric characters", ctx.FieldName)
+					return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely alpha-numeric characters", ctx.FieldName))
 				}
 			}
 		}
@@ -85,7 +85,7 @@ func constructAsciiRule(_cfg map[string]interface{}, _args ...string) (Validatio
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, r := range ctx.FieldValue {
 			if r > 127 {
-				return false, fmt.Errorf("the %s field must be entirely ASCII characters", ctx.FieldName)
+				return false, newErrValidationFailed(fmt.Sprintf("the %s field must be entirely ASCII characters", ctx.FieldName))
 			}
 		}
 		return true, nil
@@ -98,7 +98,7 @@ func constructConfirmed(_cfg map[string]interface{}, _args ...string) (Validatio
 	return func(ctx *ValidationContext) (bool, error) {
 		confirmationField := ctx.FieldName + "_confirmation"
 		if confirmationValue, ok := ctx.Raw[confirmationField]; !ok || confirmationValue != ctx.FieldValue {
-			return false, fmt.Errorf("the %s field must be confirmed", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be confirmed", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -108,12 +108,12 @@ func constructConfirmed(_cfg map[string]interface{}, _args ...string) (Validatio
 // The field under validation must have a different value than field.
 func constructDifferent(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("different rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "different rule requires at least 1 argument"}
 	}
 	otherField := args[0]
 	return func(ctx *ValidationContext) (bool, error) {
 		if otherValue, ok := ctx.Raw[otherField]; ok && otherValue == ctx.FieldValue {
-			return false, fmt.Errorf("the %s field must be different from %s", ctx.FieldName, otherField)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be different from %s", ctx.FieldName, otherField))
 		}
 		return true, nil
 	}, nil
@@ -126,7 +126,7 @@ func constructEmail(_cfg map[string]interface{}, _args ...string) (ValidationRul
 		// Simple email regex for demonstration
 		emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 		if !emailRegex.MatchString(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field must be a valid email address", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid email address", ctx.FieldName))
 		}
 		// Note: For full Laravel compatibility, would need more complex validation based on mode
 		return true, nil
@@ -137,7 +137,7 @@ func constructEmail(_cfg map[string]interface{}, _args ...string) (ValidationRul
 // The field under validation must end with one of the given values.
 func constructEndsWith(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("ends_with rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "ends_with rule requires at least 1 argument"}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, suffix := range args {
@@ -145,7 +145,7 @@ func constructEndsWith(_cfg map[string]interface{}, args ...string) (ValidationR
 				return true, nil
 			}
 		}
-		return false, fmt.Errorf("the %s field must end with one of the following: %s", ctx.FieldName, strings.Join(args, ", "))
+		return false, newErrValidationFailed(fmt.Sprintf("the %s field must end with one of the following: %s", ctx.FieldName, strings.Join(args, ", ")))
 	}, nil
 }
 
@@ -155,7 +155,7 @@ func constructHexColor(_cfg map[string]interface{}, _args ...string) (Validation
 	return func(ctx *ValidationContext) (bool, error) {
 		hexRegex := regexp.MustCompile(`^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$`)
 		if !hexRegex.MatchString(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field must be a valid hexadecimal color", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid hexadecimal color", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -165,7 +165,7 @@ func constructHexColor(_cfg map[string]interface{}, _args ...string) (Validation
 // The field under validation must be included in the given list of values.
 func constructIn(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("in rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "in rule requires at least 1 argument"}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, allowed := range args {
@@ -173,7 +173,7 @@ func constructIn(_cfg map[string]interface{}, args ...string) (ValidationRule, e
 				return true, nil
 			}
 		}
-		return false, fmt.Errorf("the %s field must be one of the following: %s", ctx.FieldName, strings.Join(args, ", "))
+		return false, newErrValidationFailed(fmt.Sprintf("the %s field must be one of the following: %s", ctx.FieldName, strings.Join(args, ", ")))
 	}, nil
 }
 
@@ -183,7 +183,7 @@ func constructJSON(_cfg map[string]interface{}, _args ...string) (ValidationRule
 	return func(ctx *ValidationContext) (bool, error) {
 		var js interface{}
 		if err := json.Unmarshal([]byte(ctx.FieldValue), &js); err != nil {
-			return false, fmt.Errorf("the %s field must be a valid JSON string", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid JSON string", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -194,7 +194,7 @@ func constructJSON(_cfg map[string]interface{}, _args ...string) (ValidationRule
 func constructIP(_cfg map[string]interface{}, _args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if net.ParseIP(ctx.FieldValue) == nil {
-			return false, fmt.Errorf("the %s field must be a valid IP address", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid IP address", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -205,7 +205,7 @@ func constructIP(_cfg map[string]interface{}, _args ...string) (ValidationRule, 
 func constructIPv4(_cfg map[string]interface{}, _args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if ip := net.ParseIP(ctx.FieldValue); ip == nil || ip.To4() == nil {
-			return false, fmt.Errorf("the %s field must be a valid IPv4 address", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid IPv4 address", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -216,7 +216,7 @@ func constructIPv4(_cfg map[string]interface{}, _args ...string) (ValidationRule
 func constructIPv6(_cfg map[string]interface{}, _args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if ip := net.ParseIP(ctx.FieldValue); ip == nil || ip.To4() != nil {
-			return false, fmt.Errorf("the %s field must be a valid IPv6 address", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid IPv6 address", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -227,7 +227,7 @@ func constructIPv6(_cfg map[string]interface{}, _args ...string) (ValidationRule
 func constructMACAddress(_cfg map[string]interface{}, _args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if _, err := net.ParseMAC(ctx.FieldValue); err != nil {
-			return false, fmt.Errorf("the %s field must be a valid MAC address", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid MAC address", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -239,7 +239,7 @@ func constructULID(_cfg map[string]interface{}, _args ...string) (ValidationRule
 	return func(ctx *ValidationContext) (bool, error) {
 		ulidRegex := regexp.MustCompile(`^[0-7][0-9A-HJKMNP-TV-Z]{25}$`)
 		if !ulidRegex.MatchString(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field must be a valid ULID", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid ULID", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -250,7 +250,7 @@ func constructULID(_cfg map[string]interface{}, _args ...string) (ValidationRule
 func constructLowercase(_cfg map[string]interface{}, _args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if ctx.FieldValue != strings.ToLower(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field must be lowercase", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be lowercase", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -260,12 +260,12 @@ func constructLowercase(_cfg map[string]interface{}, _args ...string) (Validatio
 // The field under validation must not be included in the given list of values.
 func constructNotIn(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("not_in rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "not_in rule requires at least 1 argument"}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, disallowed := range args {
 			if ctx.FieldValue == disallowed {
-				return false, fmt.Errorf("the %s field must not be one of the following: %s", ctx.FieldName, strings.Join(args, ", "))
+				return false, newErrValidationFailed(fmt.Sprintf("the %s field must not be one of the following: %s", ctx.FieldName, strings.Join(args, ", ")))
 			}
 		}
 		return true, nil
@@ -276,7 +276,7 @@ func constructNotIn(_cfg map[string]interface{}, args ...string) (ValidationRule
 // The field under validation must match the given regular expression.
 func constructRegex(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("regex rule requires 1 argument")
+		return nil, &ErrParsingRules{Reason: "regex rule requires 1 argument"}
 	}
 	pattern := strings.Join(args, ",")
 
@@ -303,11 +303,11 @@ func constructRegex(_cfg map[string]interface{}, args ...string) (ValidationRule
 
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		return nil, fmt.Errorf("invalid regex pattern: %s", pattern)
+		return nil, &ErrParsingRules{Reason: fmt.Sprintf("invalid regex pattern: %s", pattern)}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		if !re.MatchString(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field format is invalid", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field format is invalid", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -317,16 +317,16 @@ func constructRegex(_cfg map[string]interface{}, args ...string) (ValidationRule
 // The field under validation must not match the given regular expression.
 func constructNotRegex(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("not_regex rule requires 1 argument")
+		return nil, &ErrParsingRules{Reason: "not_regex rule requires 1 argument"}
 	}
 	pattern := args[0]
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		return nil, fmt.Errorf("invalid regex pattern: %s", pattern)
+		return nil, &ErrParsingRules{Reason: fmt.Sprintf("invalid regex pattern: %s", pattern)}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		if re.MatchString(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field format is invalid", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field format is invalid", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -336,12 +336,12 @@ func constructNotRegex(_cfg map[string]interface{}, args ...string) (ValidationR
 // The given field must match the field under validation.
 func constructSame(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("same rule requires 1 argument")
+		return nil, &ErrParsingRules{Reason: "same rule requires 1 argument"}
 	}
 	otherField := args[0]
 	return func(ctx *ValidationContext) (bool, error) {
 		if otherValue, ok := ctx.Raw[otherField]; !ok || otherValue != ctx.FieldValue {
-			return false, fmt.Errorf("the %s field must be the same as %s", ctx.FieldName, otherField)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be the same as %s", ctx.FieldName, otherField))
 		}
 		return true, nil
 	}, nil
@@ -351,7 +351,7 @@ func constructSame(_cfg map[string]interface{}, args ...string) (ValidationRule,
 // The field under validation must start with one of the given values.
 func constructStartsWith(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("starts_with rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "starts_with rule requires at least 1 argument"}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, prefix := range args {
@@ -359,7 +359,7 @@ func constructStartsWith(_cfg map[string]interface{}, args ...string) (Validatio
 				return true, nil
 			}
 		}
-		return false, fmt.Errorf("the %s field must start with one of the following: %s", ctx.FieldName, strings.Join(args, ", "))
+		return false, newErrValidationFailed(fmt.Sprintf("the %s field must start with one of the following: %s", ctx.FieldName, strings.Join(args, ", ")))
 	}, nil
 }
 
@@ -377,7 +377,7 @@ func constructString(_cfg map[string]interface{}, _args ...string) (ValidationRu
 func constructUppercase(_cfg map[string]interface{}, _args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if ctx.FieldValue != strings.ToUpper(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field must be uppercase", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be uppercase", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -393,7 +393,7 @@ func constructURL(_cfg map[string]interface{}, args ...string) (ValidationRule, 
 	return func(ctx *ValidationContext) (bool, error) {
 		u, err := url.Parse(ctx.FieldValue)
 		if err != nil {
-			return false, fmt.Errorf("the %s field must be a valid URL", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid URL", ctx.FieldName))
 		}
 		validScheme := false
 		for _, scheme := range schemes {
@@ -403,7 +403,7 @@ func constructURL(_cfg map[string]interface{}, args ...string) (ValidationRule, 
 			}
 		}
 		if !validScheme {
-			return false, fmt.Errorf("the %s field must be a valid URL", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid URL", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -413,12 +413,12 @@ func constructURL(_cfg map[string]interface{}, args ...string) (ValidationRule, 
 // The field under validation must not start with one of the given values.
 func constructDoesntStartWith(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("doesnt_start_with rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "doesnt_start_with rule requires at least 1 argument"}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, prefix := range args {
 			if strings.HasPrefix(ctx.FieldValue, prefix) {
-				return false, fmt.Errorf("the %s field must not start with one of the following: %s", ctx.FieldName, strings.Join(args, ", "))
+				return false, newErrValidationFailed(fmt.Sprintf("the %s field must not start with one of the following: %s", ctx.FieldName, strings.Join(args, ", ")))
 			}
 		}
 		return true, nil
@@ -429,12 +429,12 @@ func constructDoesntStartWith(_cfg map[string]interface{}, args ...string) (Vali
 // The field under validation must not end with one of the given values.
 func constructDoesntEndWith(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("doesnt_end_with rule requires at least 1 argument")
+		return nil, &ErrParsingRules{Reason: "doesnt_end_with rule requires at least 1 argument"}
 	}
 	return func(ctx *ValidationContext) (bool, error) {
 		for _, suffix := range args {
 			if strings.HasSuffix(ctx.FieldValue, suffix) {
-				return false, fmt.Errorf("the %s field must not end with one of the following: %s", ctx.FieldName, strings.Join(args, ", "))
+				return false, newErrValidationFailed(fmt.Sprintf("the %s field must not end with one of the following: %s", ctx.FieldName, strings.Join(args, ", ")))
 			}
 		}
 		return true, nil
@@ -451,12 +451,12 @@ func constructUUID(_cfg map[string]interface{}, args ...string) (ValidationRule,
 	return func(ctx *ValidationContext) (bool, error) {
 		uuidRegex := regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
 		if !uuidRegex.MatchString(ctx.FieldValue) {
-			return false, fmt.Errorf("the %s field must be a valid UUID", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid UUID", ctx.FieldName))
 		}
 		if version != "" {
 			// Check version
 			if len(ctx.FieldValue) >= 14 && ctx.FieldValue[14] != version[0] {
-				return false, fmt.Errorf("the %s field must be a valid UUID version %s", ctx.FieldName, version)
+				return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a valid UUID version %s", ctx.FieldName, version))
 			}
 		}
 		return true, nil

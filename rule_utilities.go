@@ -17,7 +17,7 @@ func Nullable(_cfg map[string]interface{}, args ...string) (ValidationRule, erro
 func Required(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if strings.TrimSpace(ctx.FieldValue) == "" {
-			return false, fmt.Errorf("%s is required", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("%s is required", ctx.FieldName))
 		}
 		return true, nil
 	}, nil
@@ -26,7 +26,7 @@ func Required(_cfg map[string]interface{}, args ...string) (ValidationRule, erro
 func Missing(_cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	return func(ctx *ValidationContext) (bool, error) {
 		if ctx.FieldValue != "" {
-			return false, fmt.Errorf("%s must be missing", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("%s must be missing", ctx.FieldName))
 		}
 		return true, nil
 	}, nil

@@ -20,7 +20,7 @@ func constructAcceptedRule(_cfg map[string]interface{}, _args ...string) (Valida
 		if val == "yes" || val == "on" || val == "1" || val == "true" {
 			return true, nil
 		}
-		return false, fmt.Errorf("the %s field must be accepted", ctx.FieldName)
+		return false, newErrValidationFailed(fmt.Sprintf("the %s field must be accepted", ctx.FieldName))
 	}, nil
 }
 
@@ -28,7 +28,7 @@ func constructAcceptedRule(_cfg map[string]interface{}, _args ...string) (Valida
 // The field under validation must be "yes", "on", 1, "1", true, or "true" if another field under validation is equal to a specified value. This is useful for validating "Terms of Service" acceptance or similar fields.
 func constructAcceptedIfRule(cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 2 {
-		return nil, fmt.Errorf("accepted_if rule requires at least 2 arguments")
+		return nil, &ErrParsingRules{Reason: "accepted_if rule requires at least 2 arguments"}
 	}
 	otherField := args[0]
 	expectedValues := args[1:]
@@ -36,7 +36,7 @@ func constructAcceptedIfRule(cfg map[string]interface{}, args ...string) (Valida
 	return func(ctx *ValidationContext) (bool, error) {
 		otherValue, ok := ctx.Raw[otherField]
 		if !ok {
-			return false, fmt.Errorf("the %s field is not present", otherField)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field is not present", otherField))
 		}
 		match := false
 		for _, v := range expectedValues {
@@ -50,7 +50,7 @@ func constructAcceptedIfRule(cfg map[string]interface{}, args ...string) (Valida
 			if val == "yes" || val == "on" || val == "1" || val == "true" {
 				return true, nil
 			}
-			return false, fmt.Errorf("the %s field must be accepted when %s is %s", ctx.FieldName, otherField, strings.Join(expectedValues, ", "))
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be accepted when %s is %s", ctx.FieldName, otherField, strings.Join(expectedValues, ", ")))
 		}
 		return true, nil
 	}, nil
@@ -72,12 +72,12 @@ func constructBooleanRule(cfg map[string]interface{}, args ...string) (Validatio
 			if val == "true" || val == "false" {
 				return true, nil
 			}
-			return false, fmt.Errorf("the %s field must be a boolean (true or false)", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a boolean (true or false)", ctx.FieldName))
 		} else {
 			if val == "true" || val == "false" || val == "1" || val == "0" {
 				return true, nil
 			}
-			return false, fmt.Errorf("the %s field must be a boolean", ctx.FieldName)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be a boolean", ctx.FieldName))
 		}
 	}, nil
 }
@@ -91,7 +91,7 @@ func constructDeclinedRule(_cfg map[string]interface{}, _args ...string) (Valida
 		if val == "no" || val == "off" || val == "0" || val == "false" {
 			return true, nil
 		}
-		return false, fmt.Errorf("the %s field must be declined", ctx.FieldName)
+		return false, newErrValidationFailed(fmt.Sprintf("the %s field must be declined", ctx.FieldName))
 	}, nil
 }
 
@@ -99,7 +99,7 @@ func constructDeclinedRule(_cfg map[string]interface{}, _args ...string) (Valida
 // The field under validation must be "no", "off", 0, "0", false, or "false" if another field under validation is equal to a specified value.
 func constructDeclinedIfRule(cfg map[string]interface{}, args ...string) (ValidationRule, error) {
 	if len(args) < 2 {
-		return nil, fmt.Errorf("declined_if rule requires at least 2 arguments")
+		return nil, &ErrParsingRules{Reason: "declined_if rule requires at least 2 arguments"}
 	}
 	otherField := args[0]
 	expectedValues := args[1:]
@@ -107,7 +107,7 @@ func constructDeclinedIfRule(cfg map[string]interface{}, args ...string) (Valida
 	return func(ctx *ValidationContext) (bool, error) {
 		otherValue, ok := ctx.Raw[otherField]
 		if !ok {
-			return false, fmt.Errorf("the %s field is not present", otherField)
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field is not present", otherField))
 		}
 		match := false
 		for _, v := range expectedValues {
@@ -121,7 +121,7 @@ func constructDeclinedIfRule(cfg map[string]interface{}, args ...string) (Valida
 			if val == "no" || val == "off" || val == "0" || val == "false" {
 				return true, nil
 			}
-			return false, fmt.Errorf("the %s field must be declined when %s is %s", ctx.FieldName, otherField, strings.Join(expectedValues, ", "))
+			return false, newErrValidationFailed(fmt.Sprintf("the %s field must be declined when %s is %s", ctx.FieldName, otherField, strings.Join(expectedValues, ", ")))
 		}
 		return true, nil
 	}, nil
